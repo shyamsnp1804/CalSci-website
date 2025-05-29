@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-200">
       <section className="pt-20 pb-10 md:pt-28 md:pb-14 lg:pt-32 lg:pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 lg:gap-8 max-w-6xl mx-auto">
