@@ -1,13 +1,20 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/home/Home";
+import Navbar from "./components/Navbar";
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </BrowserRouter>
+    // <BrowserRouter>
+    //   <Routes>
+    //     <div className="flex flex-col min-h-screen">
+    //       <Navbar />
+    //     </div>
+       
+    //     <Route path="/" element={<Home />} />
+    //   </Routes>
+    // </BrowserRouter>
+    <>
+    <Navbar />
+    </>
   );
 }
 
