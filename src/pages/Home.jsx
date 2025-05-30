@@ -16,12 +16,12 @@ function Home() {
               className="flex flex-col justify-center max-w-sm md:max-w-md lg:max-w-lg text-center md:text-left h-full"
             >
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-                Tailor your calculations like{" "}
+                "Tailor your calculations like{" "}
                 <span className="text-blue-600">never before</span> with{" "}
                 <span className="text-blue-600">CalSci</span>
               </h1>
               <p className="text-base sm:text-lg text-gray-600 mb-6">
-                Design apps that match your style and needs
+                Design apps that match your style and needs"
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                 <Link to="/signup">

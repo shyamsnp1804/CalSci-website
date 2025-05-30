@@ -1,8 +1,28 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { User, Mail, Lock, ShieldCheck } from "lucide-react";
+import { User, Mail, Lock } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { signUpUser } from "../configSupabase/auth";
 
 function SignUp() {
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await signUpUser(userName, email, password);
+    if (result.success) {
+      alert("Sign up successful! Welcome to CalSci!");
+      navigate("/signin");
+    } else {
+      alert(result.message || "Sign up failed. Please try again.");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-purple-200 px-4">
       <motion.div
@@ -29,7 +49,7 @@ function SignUp() {
           start calculating...
         </motion.p>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -39,7 +59,9 @@ function SignUp() {
             <User className="absolute top-2.5 left-3 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="Full Name"
+              placeholder="UserName"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
               required
             />
@@ -55,6 +77,8 @@ function SignUp() {
             <input
               type="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
               required
             />
@@ -70,24 +94,8 @@ function SignUp() {
             <input
               type="password"
               placeholder="Password"
-              className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
-              required
-            />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.6 }}
-            className="relative"
-          >
-            <ShieldCheck
-              className="absolute top-2.5 left-3 text-gray-400"
-              size={18}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
               required
             />

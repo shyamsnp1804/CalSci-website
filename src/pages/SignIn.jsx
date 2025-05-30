@@ -1,8 +1,25 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signInUser } from "../configSupabase/auth";
 
 function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await signInUser(email, password);
+    if (result.success) {
+      alert("Sign in successful! Welcome back to CalSci!");
+      navigate("/dashboard");
+    } else {
+      alert(result.message || "Sign in failed. Please try again.");
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-violet-100 to-sky-200 px-4">
       <motion.div
@@ -28,7 +45,7 @@ function SignIn() {
           Sign in to your account
         </motion.p>
 
-        <form className="space-y-5">
+        <form className="space-y-5" onClick={handleSubmit}>
           <motion.div
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
@@ -39,6 +56,8 @@ function SignIn() {
             <input
               type="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
@@ -54,6 +73,8 @@ function SignIn() {
             <input
               type="password"
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-10 pr-3 py-2 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
