@@ -1,25 +1,46 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { User, Mail, Lock } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { signUpUser } from "../configSupabase/auth";
+import React, { useState, useContext } from 'react';
+import { motion } from 'framer-motion';
+import { User, Mail, Lock } from 'lucide-react';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { signUpUser } from '../configSupabase/auth';
 
 function SignUp() {
-  const [userName, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const { isAuthenticated, loading: authLoading } = useContext(AuthContext);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  if (authLoading) {
+    return <div className="min-h-screen flex items-center justify-center text-gray-700">Loading...</div>;
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await signUpUser(userName, email, password);
-    if (result.success) {
-      alert("Sign up successful! Welcome to CalSci!");
-      navigate("/signin");
-    } else {
-      alert(result.message || "Sign up failed. Please try again.");
+    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      const result = await signUpUser(username, email, password);
+      setMessage(result.message);
+      setIsSuccess(result.success);
+      if (result.success) {
+        navigate('/signin');
+      }
+    } catch (error) {
+      setMessage('An unexpected error occurred. Please try again.');
+      setIsSuccess(false);
+      console.error('Sign-up error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -28,7 +49,7 @@ function SignUp() {
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
         className="w-full max-w-md backdrop-blur-lg bg-gradient-to-br from-sky-200 to-purple-300 border border-white/40 p-8 rounded-xl shadow-2xl"
       >
         <motion.h1
@@ -59,11 +80,12 @@ function SignUp() {
             <User className="absolute top-2.5 left-3 text-gray-400" size={18} />
             <input
               type="text"
-              placeholder="UserName"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
               required
+              disabled={isSubmitting}
             />
           </motion.div>
 
@@ -81,6 +103,7 @@ function SignUp() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
               required
+              disabled={isSubmitting}
             />
           </motion.div>
 
@@ -98,19 +121,34 @@ function SignUp() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white/90"
               required
+              disabled={isSubmitting}
             />
           </motion.div>
 
           <motion.button
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: isSubmitting ? 1 : 1.01 }}
+            whileTap={{ scale: isSubmitting ? 1 : 0.97 }}
             transition={{ duration: 0.2 }}
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition-colors"
+            className={`w-full py-2 rounded text-white transition-colors ${
+              isSubmitting ? 'bg-blue-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+            }`}
+            disabled={isSubmitting}
           >
-            Sign Up
+            {isSubmitting ? 'Signing Up...' : 'Sign Up'}
           </motion.button>
         </form>
+
+        {message && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className={`text-sm text-center mt-4 ${isSuccess ? 'text-green-600' : 'text-red-600'}`}
+          >
+            {message}
+          </motion.p>
+        )}
 
         <motion.p
           initial={{ opacity: 0 }}
@@ -118,13 +156,13 @@ function SignUp() {
           transition={{ delay: 0.9 }}
           className="text-sm text-center text-gray-700 mt-5"
         >
-          Already have an account?{" "}
-          <a
-            href="/signin"
+          Already have an account?{' '}
+          <Link
+            to="/signin"
             className="text-blue-600 font-medium hover:underline"
           >
             Sign in
-          </a>
+          </Link>
         </motion.p>
       </motion.div>
     </div>

@@ -1,27 +1,32 @@
 import { Menu, X } from "lucide-react";
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { AuthContext } from "../context/AuthContext";
 
 function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useContext(AuthContext);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    setIsMobileOpen(false);
-  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsMobileOpen(false);
+  }, [location.pathname]);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
 
   return (
     <motion.header
@@ -39,7 +44,6 @@ function Navbar() {
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <Link
             to="/"
@@ -51,29 +55,51 @@ function Navbar() {
           >
             Home
           </Link>
-          <Link
-            to="/signin"
-            className={`text-sm font-medium px-4 py-2 rounded transition ${
-              location.pathname === "/signin"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
-            }`}
-          >
-            Sign In
-          </Link>
-          <Link
-            to="/signup"
-            className={`text-sm font-medium px-4 py-2 rounded transition ${
-              location.pathname === "/signup"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
-            }`}
-          >
-            Sign Up
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link
+                to="/dashboard"
+                className={`text-sm font-medium px-4 py-2 rounded transition ${
+                  location.pathname === "/dashboard"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+                }`}
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="text-sm font-medium px-4 py-2 rounded text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/signin"
+                className={`text-sm font-medium px-4 py-2 rounded transition ${
+                  location.pathname === "/signin"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+                }`}
+              >
+                Sign In
+              </Link>
+              <Link
+                to="/signup"
+                className={`text-sm font-medium px-4 py-2 rounded transition ${
+                  location.pathname === "/signup"
+                    ? "text-blue-600 border-b-2 border-blue-600"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+                }`}
+              >
+                Sign Up
+              </Link>
+            </>
+          )}
         </nav>
 
-        {/* Mobile Navigation Button */}
         <button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="md:hidden text-gray-800 hover:text-blue-600"
@@ -82,7 +108,6 @@ function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -102,26 +127,49 @@ function Navbar() {
             >
               Home
             </Link>
-            <Link
-              to="/signin"
-              className={`text-base font-medium px-4 py-2 rounded ${
-                location.pathname === "/signin"
-                  ? "bg-blue-100 text-blue-700"
-                  : "hover:bg-blue-100"
-              }`}
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/signup"
-              className={`text-base font-medium px-4 py-2 rounded ${
-                location.pathname === "/signup"
-                  ? "bg-blue-100 text-blue-700"
-                  : "hover:bg-blue-100"
-              }`}
-            >
-              Sign Up
-            </Link>
+            {isAuthenticated ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className={`text-base font-medium px-4 py-2 rounded ${
+                    location.pathname === "/dashboard"
+                      ? "bg-blue-100 text-blue-700"
+                      : "hover:bg-blue-100"
+                  }`}
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-base font-medium px-4 py-2 rounded hover:bg-blue-100 text-left"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/signin"
+                  className={`text-base font-medium px-4 py-2 rounded ${
+                    location.pathname === "/signin"
+                      ? "bg-blue-100 text-blue-700"
+                      : "hover:bg-blue-100"
+                  }`}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/signup"
+                  className={`text-base font-medium px-4 py-2 rounded ${
+                    location.pathname === "/signup"
+                      ? "bg-blue-100 text-blue-700"
+                      : "hover:bg-blue-100"
+                  }`}
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
