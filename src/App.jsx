@@ -37,6 +37,15 @@ function App() {
             />
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path='/codeEditor' element={<CodeEditor />} />
+            <Route
+              path="/verify"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" replace />
+                ) : (
+                  <Navigate to="/signup" replace />
+                )
+              } />
           </Routes>
         </AnimatePresence>
       </main>

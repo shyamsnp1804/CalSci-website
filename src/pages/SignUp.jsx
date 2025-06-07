@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { User, Mail, Lock } from 'lucide-react';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import { signUpUser } from '../configSupabase/auth';
+import { supabase } from '../configSupabase/config';
 
 function SignUp() {
   const { isAuthenticated, loading: authLoading } = useContext(AuthContext);
@@ -29,11 +29,25 @@ function SignUp() {
     setIsSubmitting(true);
 
     try {
-      const result = await signUpUser(username, email, password);
-      setMessage(result.message);
-      setIsSuccess(result.success);
-      if (result.success) {
-        navigate('/signin');
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/verify`,
+          data: { username },
+        },
+      });
+
+      if (error) {
+        setMessage(error.message);
+        setIsSuccess(false);
+      } else if (data.user && !data.user.confirmed_at) {
+        setMessage('Please check your email for a verification link from CalSci.');
+        setIsSuccess(true);
+        setTimeout(() => navigate('/signin'), 5000);
+      } else {
+        setMessage('Unexpected response from server.');
+        setIsSuccess(false);
       }
     } catch (error) {
       setMessage('An unexpected error occurred. Please try again.');
