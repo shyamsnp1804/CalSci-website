@@ -5,6 +5,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { signInUser } from '../configSupabase/auth';
 import { Link } from 'react-router-dom';
+import { supabase } from '../configSupabase/config';
 
 function SignIn() {
   const { isAuthenticated, loading: authLoading } = useContext(AuthContext);
@@ -30,15 +31,56 @@ function SignIn() {
 
     try {
       const result = await signInUser(email, password);
-      setMessage(result.message);
-      setIsSuccess(result.success);
-      if (result.success) {
-        navigate('/dashboard');
+      if (!result.success) {
+        throw new Error(result.message);
       }
+
+      // Get session data after successful sign-in
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        throw new Error(`Failed to retrieve session: ${sessionError.message}`);
+      }
+
+      if (!session?.user) {
+        throw new Error("No user data found in session.");
+      }
+
+      const userId = session.user.id;
+      const userName = session.user.user_metadata.userName;
+      const userEmail = session.user.email;
+
+      // Validate userName
+      if (!userName) {
+        throw new Error("Username not set in user metadata. Please contact support.");
+      }
+
+      // Call Edge Function to save user data
+      console.log("Calling Edge Function with:", { userId, userName, email: userEmail }); // Debug
+      const response = await fetch(
+        "https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/save-user-after-confirmation",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ userId, userName, email: userEmail }),
+        }
+      );
+
+      const resultEdge = await response.json();
+      console.log("Edge Function response:", resultEdge); // Debug
+      if (!resultEdge.success) {
+        throw new Error(`Failed to save user data: ${resultEdge.error}`);
+      }
+
+      setMessage(result.message); // "Sign in successful!"
+      setIsSuccess(true);
+      navigate('/dashboard');
     } catch (error) {
-      setMessage('An unexpected error occurred. Please try again.');
+      setMessage(error.message || 'An unexpected error occurred. Please try again.');
       setIsSuccess(false);
-      console.error('Sign-in error:', error);
+      console.error('Sign-in or Edge Function error:', error.message);
     } finally {
       setIsSubmitting(false);
     }

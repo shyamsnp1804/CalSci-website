@@ -24,15 +24,6 @@ export async function signUpUser(userName, email, password) {
     }
 
     if (data.user) {
-      const { error: dbError } = await supabase
-        .from("users")
-        .insert([{ id: data.user.id, userName, email }]);
-
-      if (dbError) {
-        console.error("Database error:", dbError);
-        throw new Error("Failed to create user profile: " + dbError.message);
-      }
-
       return {
         success: true,
         message: "Signup successful! Please check your email to confirm.",
