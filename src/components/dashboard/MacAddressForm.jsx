@@ -65,7 +65,7 @@ const MacAddressForm = ({ onSubmit }) => {
           type="text"
           value={macAddress}
           onChange={(e) => setMacAddress(e.target.value)}
-          placeholder="e.g., 00AABB112255"
+          placeholder="e.g., 00AABBCCDDEE"
           className="p-3 rounded-lg border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-800"
         />
         <motion.button
