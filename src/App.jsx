@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import CodeEditor from "./pages/CodeEditor";
+import AppCodeEditor from "./pages/dashboard/AppCodeEditor";
 
 function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -32,6 +33,16 @@ function App() {
                 element={
                   isAuthenticated ? (
                     <Dashboard />
+                  ) : (
+                    <Navigate to="/signin" replace />
+                  )
+                }
+              />
+              <Route
+                path="/dashboard/code-editor/:macAddress"
+                element={
+                  isAuthenticated ? (
+                    <AppCodeEditor />
                   ) : (
                     <Navigate to="/signin" replace />
                   )

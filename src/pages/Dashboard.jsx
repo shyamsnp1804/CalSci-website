@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import MacAddressForm from '../components/dashboard/MacAddressForm';
 import AppList from '../components/dashboard/AppList';
@@ -10,10 +10,21 @@ const EDGE_FUNCTION_URL = 'https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1
 
 const Dashboard = () => {
   const { isAuthenticated, loading, user } = useContext(AuthContext);
+  const location = useLocation();
   const [macAddress, setMacAddress] = useState('');
   const [apps, setApps] = useState([]);
   const [fetchError, setFetchError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  // Load macAddress from query params
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mac = params.get('macAddress');
+    if (mac) {
+      setMacAddress(mac);
+      fetchApps(mac);
+    }
+  }, [location.search]);
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-gray-700">Loading...</div>;
