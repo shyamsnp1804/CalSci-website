@@ -23,18 +23,14 @@ const AppList = ({ macAddress, apps }) => {
         <table className="w-full bg-white/90 rounded-lg shadow-lg border border-blue-200">
           <thead>
             <tr className="bg-blue-100">
-              <th className="p-3 text-left text-blue-800">ID</th>
               <th className="p-3 text-left text-blue-800">App Name</th>
-              <th className="p-3 text-left text-blue-800">Code</th>
-              <th className="p-3 text-left text-blue-800">Downloaded</th>
+              <th className="p-3 text-left text-blue-800">is_Downloaded</th>
             </tr>
           </thead>
           <tbody>
             {apps.map((app, index) => (
               <tr key={index} className="border-t border-blue-200">
-                <td className="p-3 text-gray-800">{app.id}</td>
                 <td className="p-3 text-gray-800">{app.app_name}</td>
-                <td className="p-3 text-gray-800 truncate max-w-xs">{app.code}</td>
                 <td className="p-3 text-gray-800">{app.is_downloaded ? 'Yes' : 'No'}</td>
               </tr>
             ))}
