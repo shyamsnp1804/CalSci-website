@@ -66,20 +66,25 @@ const CodeEditor = () => {
           MicroPython Code Editor
         </motion.h1>
 
-        <div className="relative mb-4">
+        <motion.div
+          className="flex justify-end mb-4"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+        >
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleRunCode}
             disabled={isLoading}
-            className={`absolute top-0 right-0 flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full font-medium transition-colors ${
+            className={`flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full font-medium transition-colors ${
               isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:from-blue-600 hover:to-purple-700'
             }`}
           >
             <Play size={18} />
             {isLoading ? 'Running...' : 'Run Code'}
           </motion.button>
-        </div>
+        </motion.div>
 
         <motion.div
           className="bg-white/90 backdrop-blur-lg rounded-xl shadow-xl overflow-hidden border border-blue-200 mb-8"
