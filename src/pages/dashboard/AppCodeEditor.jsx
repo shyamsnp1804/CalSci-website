@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useMicroPython } from '../../codeEditor/microPythonLogic';
 import { supabase } from '../../configSupabase/config';
 
-const EDGE_FUNCTION_URL = 'https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/create-app';
+const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_APP;
 
 const AppCodeEditor = () => {
   const { isAuthenticated, loading } = useContext(AuthContext);

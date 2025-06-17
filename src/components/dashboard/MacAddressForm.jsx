@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Network } from 'lucide-react';
 import { supabase } from '../../configSupabase/config';
 
-const EDGE_FUNCTION_URL = 'https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/create-table';
+const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_TABLE;
 
 const MacAddressForm = ({ onSubmit }) => {
   const [macAddress, setMacAddress] = useState('');
@@ -23,7 +23,7 @@ const MacAddressForm = ({ onSubmit }) => {
         return;
       }
 
-      console.log('Submitting MAC:', macAddress, 'to:', EDGE_FUNCTION_URL);
+      // console.log('Submitting MAC:', macAddress, 'to:', EDGE_FUNCTION_URL);
 
       const response = await fetch(EDGE_FUNCTION_URL, {
         method: 'POST',
@@ -35,7 +35,7 @@ const MacAddressForm = ({ onSubmit }) => {
       });
 
       const data = await response.json();
-      console.log('Response:', data, 'Status:', response.status);
+      // console.log('Response:', data, 'Status:', response.status);
 
       if (!response.ok) {
         throw new Error(data.error || `Failed to submit MAC address (Status: ${response.status})`);

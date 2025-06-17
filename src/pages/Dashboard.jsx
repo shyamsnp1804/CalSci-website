@@ -6,7 +6,7 @@ import MacAddressForm from '../components/dashboard/MacAddressForm';
 import AppList from '../components/dashboard/AppList';
 import { supabase } from '../configSupabase/config';
 
-const EDGE_FUNCTION_URL = 'https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/create-table';
+const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_TABLE;
 
 const Dashboard = () => {
   const { isAuthenticated, loading, user } = useContext(AuthContext);
