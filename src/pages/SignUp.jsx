@@ -80,7 +80,7 @@ function SignUp() {
           transition={{ delay: 0.2 }}
           className="text-sm text-center text-gray-600 mb-6"
         >
-          Join <span className="font-semibold text-blue-700">CalSci</span> and
+          Join CalSci and
           start calculating...
         </motion.p>
 
