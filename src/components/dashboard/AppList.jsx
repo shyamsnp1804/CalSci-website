@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { Edit2, Trash2 } from 'lucide-react';
 
 const AppList = ({ macAddress, apps }) => {
   const navigate = useNavigate();
@@ -25,13 +26,37 @@ const AppList = ({ macAddress, apps }) => {
             <tr className="bg-blue-100">
               <th className="p-3 text-left text-blue-800">App Name</th>
               <th className="p-3 text-left text-blue-800">is_Downloaded</th>
+             <th className="p-3 text-left text-blue-800">Actions</th>
             </tr>
           </thead>
           <tbody>
             {apps.map((app, index) => (
               <tr key={index} className="border-t border-blue-200">
-                <td className="p-3 text-gray-800">{app.app_name}</td>
+                                <td className="p-3">
+                  <Link
+                    to={`/dashboard/code-preview/${macAddress}/${app.app_name}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {app.app_name}
+                  </Link>
+                </td>
                 <td className="p-3 text-gray-800">{app.is_downloaded ? 'Yes' : 'No'}</td>
+            <td className="p-3 flex gap-5">
+                  <Link
+                    to={`/dashboard/update-app/${macAddress}/${app.app_name}`}
+                    className="text-yellow-600 hover:text-yellow-900"
+                    title="Update App"
+                  >
+                    <Edit2 size={22} />
+                  </Link>
+                  <Link
+                    to={`/dashboard/delete-app/${macAddress}/${app.app_name}`}
+                    className="text-red-600 hover:text-red-900"
+                    title="Delete App"
+                  >
+                    <Trash2 size={22} />
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
