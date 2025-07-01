@@ -120,8 +120,6 @@ const AppUpdateModal = () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Unauthorized');
 
-      console.log('AppUpdateModal: Sending update request for appName=', appName);
-
       const response = await fetch(EDGE_FUNCTION_URL, {
         method: 'POST',
         headers: {

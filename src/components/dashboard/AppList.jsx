@@ -36,7 +36,6 @@ const AppList = ({ macAddress, apps }) => {
                   <Link
                     to={`/dashboard/code-preview/${macAddress}/${app.app_name}`}
                     className="text-blue-600 hover:underline"
-                    onClick={() => console.log(`Navigating to /dashboard/code-preview/${macAddress}/${app.app_name}`)}
                   >
                     {app.app_name}
                   </Link>
