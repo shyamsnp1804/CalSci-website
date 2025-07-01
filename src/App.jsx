@@ -11,6 +11,8 @@ import Dashboard from "./pages/Dashboard";
 import CodeEditor from "./pages/CodeEditor";
 import AppCodeEditor from "./pages/dashboard/AppCodeEditor";
 import AppCodePreview from "./pages/dashboard/AppCodePreview";
+import AppUpdateModal from "./pages/dashboard/AppUpdateModal";
+import AppDeleteModal from "./pages/dashboard/AppDeleteModal";
 
 function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -55,6 +57,26 @@ function App() {
                 element={
                   isAuthenticated ? (
                     <AppCodePreview />
+                  ) : (
+                    <Navigate to="/signin" replace />
+                  )
+                }
+              />
+              <Route
+                path="/dashboard/update-app/:macAddress/:appName"
+                element={
+                  isAuthenticated ? (
+                    <AppUpdateModal />
+                  ) : (
+                    <Navigate to="/signin" replace />
+                  )
+                }
+              />
+              <Route
+                path="/dashboard/delete-app/:macAddress/:appName"
+                element={
+                  isAuthenticated ? (
+                    <AppDeleteModal />
                   ) : (
                     <Navigate to="/signin" replace />
                   )
