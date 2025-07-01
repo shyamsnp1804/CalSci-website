@@ -13,18 +13,15 @@ const AppCodePreview = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  // validate macAddress
   if (!macAddress || !/^[0-9A-Fa-f:]{12,17}$/.test(macAddress)) {
-    console.error('AppCodePreview: Invalid or missing MAC address, redirecting to /dashboard');
+    console.error('AppCodePreview: Invalid or missing MAC address');
     setError('Invalid or missing MAC address');
     return <Navigate to="/dashboard" replace />;
   }
 
-  // redirect if not authenticated
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-700">Loading...</div>;
+  if (loading) return <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"><div className="text-gray-100">Loading...</div></div>;
   if (!isAuthenticated) return <Navigate to="/signin" replace />;
 
-  // fetching code for the app
   useEffect(() => {
     const fetchCode = async () => {
       try {
@@ -32,24 +29,31 @@ const AppCodePreview = () => {
         if (!session) throw new Error('Unauthorized');
 
         const cleanMac = macAddress.toLowerCase().replace(/:/g, '');
+
         const { data, error } = await supabase
           .from(`device_${cleanMac}`)
           .select('app_name, file_path')
           .eq('app_name', appName)
           .single();
 
-        if (error) throw new Error(`Failed to fetch app: ${error.message}`);
-        if (!data) throw new Error('App not found');
+        if (error || !data) {
+          console.error('AppCodePreview: App fetch error:', error?.message || 'App not found');
+          throw new Error(error?.message || 'App not found');
+        }
 
-        // Fetch code from storage
+        // add cache-busting query parameter
+        const cacheBuster = new Date().getTime();
         const { data: fileData, error: fileError } = await supabase.storage
           .from('apps')
-          .download(data.file_path);
+          .download(`${data.file_path}?cb=${cacheBuster}`);
 
-        if (fileError) throw new Error(`Failed to fetch code: ${fileError.message}`);
+        if (fileError) {
+          console.error('AppCodePreview: File download error:', fileError.message);
+          throw new Error(`Failed to fetch code: ${fileError.message}`);
+        }
 
         const codeText = await fileData.text();
-        setCodeLines(codeText.split('\n')); // Split into lines
+        setCodeLines(codeText.split('\n'));
         setIsLoading(false);
       } catch (err) {
         setError(err.message);
@@ -60,16 +64,12 @@ const AppCodePreview = () => {
   }, [macAddress, appName]);
 
   if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-black/5 backdrop-blur-xs flex items-center justify-center z-50">
-        <div className="text-center text-gray-100">Loading code...</div>
-      </div>
-    );
+    return <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"><div className="text-gray-100">Loading code...</div></div>;
   }
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black/5 backdrop-blur-xs flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
