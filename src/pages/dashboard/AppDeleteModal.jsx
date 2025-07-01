@@ -14,8 +14,6 @@ const AppDeleteModal = () => {
   const [error, setError] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
-  console.log('AppDeleteModal: macAddress=', macAddress, 'appName=', appName);
-
   if (!macAddress || !/^[0-9A-Fa-f:]{12,17}$/.test(macAddress) || !appName) {
     console.error('AppDeleteModal: Invalid or missing MAC address or appName');
     setError('Invalid or missing MAC address or app name');
@@ -30,8 +28,6 @@ const AppDeleteModal = () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error('Unauthorized');
-
-      console.log('AppDeleteModal: Sending delete request for appName=', appName);
 
       const response = await fetch(DELETE_FUNCTION_URL, {
         method: 'POST',
