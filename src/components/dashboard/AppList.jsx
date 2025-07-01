@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 const AppList = ({ macAddress, apps }) => {
   const navigate = useNavigate();
@@ -30,7 +30,15 @@ const AppList = ({ macAddress, apps }) => {
           <tbody>
             {apps.map((app, index) => (
               <tr key={index} className="border-t border-blue-200">
-                <td className="p-3 text-gray-800">{app.app_name}</td>
+                                <td className="p-3">
+                  <Link
+                    to={`/dashboard/code-preview/${macAddress}/${app.app_name}`}
+                    className="text-blue-600 hover:underline"
+                    onClick={() => console.log(`Navigating to /dashboard/code-preview/${macAddress}/${app.app_name}`)}
+                  >
+                    {app.app_name}
+                  </Link>
+                </td>
                 <td className="p-3 text-gray-800">{app.is_downloaded ? 'Yes' : 'No'}</td>
               </tr>
             ))}
