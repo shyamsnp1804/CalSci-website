@@ -85,7 +85,6 @@ const Device = () => {
         console.error("Device: Error refreshing apps:", error.message);
         setError(error.message);
       } else {
-        console.log("Device: Refreshed apps=", data);
         setApps(data || []);
       }
     } catch (err) {
@@ -131,7 +130,7 @@ const Device = () => {
             macAddress={macAddress}
             appName={modalState.selectedApp}
             onClose={closeModal}
-            onSave={refreshApps}
+            onUpdate={refreshApps}
           />
         )}
         {modalState.showDelete && (

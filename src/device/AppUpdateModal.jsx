@@ -20,6 +20,15 @@ const AppUpdateModal = ({ macAddress, appName, onClose, onUpdate }) => {
   useEffect(() => {
     const fetchAppData = async () => {
       try {
+        if (
+          !macAddress ||
+          !/^[0-9A-Fa-f:]{12,17}$/.test(macAddress) ||
+          !appName
+        ) {
+          console.error("AppUpdateModal: Invalid macAddress or appName");
+          throw new Error("Invalid or missing MAC address or app name");
+        }
+
         const {
           data: { session },
         } = await supabase.auth.getSession();
@@ -32,21 +41,34 @@ const AppUpdateModal = ({ macAddress, appName, onClose, onUpdate }) => {
         const { data, error } = await supabase
           .from(`device_${cleanMac}`)
           .select("app_name, file_path")
-          .eq("app_name", appName)
-          .single();
+          .eq("app_name", appName);
 
-        if (error || !data) {
-          console.error(
-            "AppUpdateModal: App fetch error:",
-            error?.message || "App not found"
-          );
-          throw new Error(error?.message || "App not found");
+        if (error) {
+          console.error("AppUpdateModal: App fetch error:", error.message);
+          throw new Error(`Failed to fetch app: ${error.message}`);
         }
+
+        if (!data || data.length === 0) {
+          console.error("AppUpdateModal: No app found for appName=", appName);
+          throw new Error("App not found");
+        }
+
+        if (data.length > 1) {
+          console.error(
+            "AppUpdateModal: Multiple apps found for appName=",
+            appName,
+            "data=",
+            data
+          );
+          throw new Error("Multiple apps with the same name found");
+        }
+
+        const appData = data[0];
 
         const cacheBuster = new Date().getTime();
         const { data: fileData, error: fileError } = await supabase.storage
           .from("apps")
-          .download(`${data.file_path}?cb=${cacheBuster}`);
+          .download(`${appData.file_path}?cb=${cacheBuster}`);
 
         if (fileError) {
           console.error(
@@ -105,12 +127,6 @@ const AppUpdateModal = ({ macAddress, appName, onClose, onUpdate }) => {
         { open: "'", close: "'" },
       ],
     });
-    console.log(
-      "AppUpdateModal: Monaco Editor mounted for macAddress=",
-      macAddress,
-      "appName=",
-      appName
-    );
   };
 
   const handleRunCode = () => {
@@ -132,6 +148,7 @@ const AppUpdateModal = ({ macAddress, appName, onClose, onUpdate }) => {
         console.error("AppUpdateModal: No session found");
         throw new Error("Unauthorized");
       }
+
       const response = await fetch(EDGE_FUNCTION_URL, {
         method: "POST",
         headers: {
@@ -153,7 +170,12 @@ const AppUpdateModal = ({ macAddress, appName, onClose, onUpdate }) => {
         }
       }
       setError("");
-      onUpdate();
+      if (typeof onUpdate === "function") {
+        onUpdate();
+      } else {
+        console.error("AppUpdateModal: onUpdate is not a function", onUpdate);
+        setError("Update failed: onUpdate is not a function");
+      }
       onClose();
     } catch (err) {
       console.error("AppUpdateModal: Save error:", err.message);

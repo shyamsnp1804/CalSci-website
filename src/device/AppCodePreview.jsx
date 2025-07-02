@@ -13,6 +13,15 @@ const AppCodePreview = ({ macAddress, appName, onClose }) => {
   useEffect(() => {
     const fetchCode = async () => {
       try {
+        if (
+          !macAddress ||
+          !/^[0-9A-Fa-f:]{12,17}$/.test(macAddress) ||
+          !appName
+        ) {
+          console.error("AppCodePreview: Invalid macAddress or appName");
+          throw new Error("Invalid or missing MAC address or app name");
+        }
+
         const {
           data: { session },
         } = await supabase.auth.getSession();
@@ -25,21 +34,33 @@ const AppCodePreview = ({ macAddress, appName, onClose }) => {
         const { data, error } = await supabase
           .from(`device_${cleanMac}`)
           .select("app_name, file_path")
-          .eq("app_name", appName)
-          .single();
+          .eq("app_name", appName);
 
-        if (error || !data) {
-          console.error(
-            "AppCodePreview: App fetch error:",
-            error?.message || "App not found"
-          );
-          throw new Error(error?.message || "App not found");
+        if (error) {
+          console.error("AppCodePreview: App fetch error:", error.message);
+          throw new Error(`Failed to fetch app: ${error.message}`);
         }
 
+        if (!data || data.length === 0) {
+          console.error("AppCodePreview: No app found for appName=", appName);
+          throw new Error("App not found");
+        }
+
+        if (data.length > 1) {
+          console.error(
+            "AppCodePreview: Multiple apps found for appName=",
+            appName,
+            "data=",
+            data
+          );
+          throw new Error("Multiple apps with the same name found");
+        }
+
+        const appData = data[0];
         const cacheBuster = new Date().getTime();
         const { data: fileData, error: fileError } = await supabase.storage
           .from("apps")
-          .download(`${data.file_path}?cb=${cacheBuster}`);
+          .download(`${appData.file_path}?cb=${cacheBuster}`);
 
         if (fileError) {
           console.error(

@@ -44,10 +44,8 @@ function Navbar() {
             }
 
             if (data && data.length > 0) {
-              console.log('Navbar: Found macAddress=', data[0].mac_address);
               setDevicePath(`/device/${data[0].mac_address}`);
             } else {
-              console.log('Navbar: No devices found');
               setDevicePath("/device/add");
             }
           }
