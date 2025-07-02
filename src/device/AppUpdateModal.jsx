@@ -1,61 +1,58 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Navigate, useParams, useNavigate } from 'react-router-dom';
-import Editor from '@monaco-editor/react';
-import * as monaco from 'monaco-editor';
-import { Play, Save, X } from 'lucide-react';
-import { AuthContext } from '../../context/AuthContext';
-import { useMicroPython } from '../../codeEditor/microPythonLogic';
-import { supabase } from '../../configSupabase/config';
+import React, { useRef, useState, useContext, useEffect } from "react";
+import { motion } from "framer-motion";
+import Editor from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
+import { Play, Save, X } from "lucide-react";
+import { AuthContext } from "../context/AuthContext";
+import { useMicroPython } from "../codeEditor/microPythonLogic";
+import { supabase } from "../configSupabase/config";
 
-const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_APP
+const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_APP;
 
-const AppUpdateModal = () => {
-  const { isAuthenticated, loading } = useContext(AuthContext);
-  const { macAddress, appName } = useParams();
-  const navigate = useNavigate();
+const AppUpdateModal = ({ macAddress, appName, onClose, onUpdate }) => {
+  const { isAuthenticated } = useContext(AuthContext);
   const editorRef = useRef(null);
   const { output, isLoading: isRunning, runCode } = useMicroPython();
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
   const [isLoadingData, setIsLoadingData] = useState(true);
-
-  if (!macAddress || !/^[0-9A-Fa-f:]{12,17}$/.test(macAddress) || !appName) {
-    console.error('AppUpdateModal: Invalid or missing MAC address or appName');
-    setError('Invalid or missing MAC address or app name');
-    return <Navigate to="/dashboard" replace />;
-  }
-
-  if (loading) return <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"><div className="text-gray-100">Loading...</div></div>;
-  if (!isAuthenticated) return <Navigate to="/signin" replace />;
 
   useEffect(() => {
     const fetchAppData = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) throw new Error('Unauthorized');
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+        if (!session) {
+          console.error("AppUpdateModal: No session found");
+          throw new Error("Unauthorized");
+        }
 
-        const cleanMac = macAddress.toLowerCase().replace(/:/g, '');
-
+        const cleanMac = macAddress.toLowerCase().replace(/:/g, "");
         const { data, error } = await supabase
           .from(`device_${cleanMac}`)
-          .select('app_name, file_path')
-          .eq('app_name', appName)
+          .select("app_name, file_path")
+          .eq("app_name", appName)
           .single();
 
         if (error || !data) {
-          console.error('AppUpdateModal: App fetch error:', error?.message || 'App not found');
-          throw new Error(error?.message || 'App not found');
+          console.error(
+            "AppUpdateModal: App fetch error:",
+            error?.message || "App not found"
+          );
+          throw new Error(error?.message || "App not found");
         }
 
-        // add cache-busting query parameter
         const cacheBuster = new Date().getTime();
         const { data: fileData, error: fileError } = await supabase.storage
-          .from('apps')
+          .from("apps")
           .download(`${data.file_path}?cb=${cacheBuster}`);
 
         if (fileError) {
-          console.error('AppUpdateModal: File download error:', fileError.message);
+          console.error(
+            "AppUpdateModal: File download error:",
+            fileError.message
+          );
           throw new Error(`Failed to fetch code: ${fileError.message}`);
         }
 
@@ -63,6 +60,7 @@ const AppUpdateModal = () => {
         setCode(codeText);
         setIsLoadingData(false);
       } catch (err) {
+        console.error("AppUpdateModal: Fetch error:", err.message);
         setError(err.message);
         setIsLoadingData(false);
       }
@@ -72,37 +70,47 @@ const AppUpdateModal = () => {
 
   const handleEditorDidMount = (editor, monacoInstance) => {
     editorRef.current = editor;
-    monacoInstance.languages.register({ id: 'micropython' });
-    monacoInstance.languages.setMonarchTokensProvider('micropython', {
+    monacoInstance.languages.register({ id: "micropython" });
+    monacoInstance.languages.setMonarchTokensProvider("micropython", {
       tokenizer: {
         root: [
-          [/#.*$/, 'comment'],
-          [/def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/, 'keyword'],
-          [/(print|if|else|for|while|def|class|import|from)/, 'keyword'],
-          [/"(?:\\.|.)*?"/, 'string'],
-          [/'(?:\\.|.)*?'/, 'string'],
-          [/\d+/, 'number'],
+          [/#.*$/, "comment"],
+          [/def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/, "keyword"],
+          [/(print|if|else|for|while|def|class|import|from)/, "keyword"],
+          [/"(?:\\.|.)*?"/, "string"],
+          [/'(?:\\.|.)*?'/, "string"],
+          [/\d+/, "number"],
         ],
       },
     });
-    monacoInstance.languages.setLanguageConfiguration('micropython', {
-      comments: { lineComment: '#' },
-      brackets: [['{', '}'], ['[', ']'], ['(', ')']],
+    monacoInstance.languages.setLanguageConfiguration("micropython", {
+      comments: { lineComment: "#" },
+      brackets: [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+      ],
       autoClosingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
+        { open: "{", close: "}" },
+        { open: "[", close: "]" },
+        { open: "(", close: ")" },
         { open: '"', close: '"' },
         { open: "'", close: "'" },
       ],
       surroundingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
+        { open: "{", close: "}" },
+        { open: "[", close: "]" },
+        { open: "(", close: ")" },
         { open: '"', close: '"' },
         { open: "'", close: "'" },
       ],
     });
+    console.log(
+      "AppUpdateModal: Monaco Editor mounted for macAddress=",
+      macAddress,
+      "appName=",
+      appName
+    );
   };
 
   const handleRunCode = () => {
@@ -113,18 +121,22 @@ const AppUpdateModal = () => {
   const handleSave = async () => {
     const code = editorRef.current.getValue();
     if (!code) {
-      setError('Code is required');
+      setError("Code is required");
       return;
     }
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) throw new Error('Unauthorized');
-
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) {
+        console.error("AppUpdateModal: No session found");
+        throw new Error("Unauthorized");
+      }
       const response = await fetch(EDGE_FUNCTION_URL, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ macAddress, appName, code, isUpdate: true }),
       });
@@ -133,43 +145,63 @@ const AppUpdateModal = () => {
         const text = await response.text();
         try {
           const data = JSON.parse(text);
-          throw new Error(data.error || 'Failed to update app');
+          throw new Error(data.error || "Failed to update app");
         } catch {
-          throw new Error(`Server returned non-JSON response: ${text.slice(0, 50)}...`);
+          throw new Error(
+            `Server returned non-JSON response: ${text.slice(0, 50)}...`
+          );
         }
       }
-
-      setError('');
-      navigate(`/dashboard?macAddress=${macAddress}`);
+      setError("");
+      onUpdate();
+      onClose();
     } catch (err) {
+      console.error("AppUpdateModal: Save error:", err.message);
       setError(`Update failed: ${err.message}`);
     }
   };
 
+  if (!isAuthenticated) {
+    return null; // Handled by Device.jsx
+  }
+
   if (isLoadingData) {
-    return <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50"><div className="text-gray-100">Loading code...</div></div>;
+    return (
+      <motion.div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="text-gray-100">Loading code...</div>
+      </motion.div>
+    );
   }
 
   return (
     <motion.div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
+      onClick={onClose}
     >
       <motion.div
         className="bg-white/95 backdrop-blur-lg rounded-xl shadow-2xl max-w-3xl w-full max-h-[80vh] flex flex-col border border-blue-300"
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         transition={{ duration: 0.3 }}
+        onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-center p-4 border-b border-blue-200">
-          <h2 className="text-lg font-semibold text-blue-800">Update App: {appName}</h2>
+          <h2 className="text-lg font-semibold text-blue-800">
+            Update App: {appName}
+          </h2>
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => navigate(`/dashboard?macAddress=${macAddress}`)}
+            onClick={onClose}
             className="text-gray-600 hover:text-red-600"
             aria-label="Close"
           >
@@ -183,11 +215,11 @@ const AppUpdateModal = () => {
             onClick={handleRunCode}
             disabled={isRunning}
             className={`flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full font-medium ${
-              isRunning ? 'opacity-50 cursor-not-allowed' : ''
+              isRunning ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
             <Play size={18} />
-            {isRunning ? 'Running...' : 'Run'}
+            {isRunning ? "Running..." : "Run"}
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -205,14 +237,14 @@ const AppUpdateModal = () => {
             language="micropython"
             theme="vs-dark"
             value={code}
-            onChange={(value) => setCode(value || '')}
+            onChange={(value) => setCode(value || "")}
             onMount={handleEditorDidMount}
             options={{
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
               fontSize: 14,
               padding: { top: 16, bottom: 16 },
-              lineNumbers: 'on',
+              lineNumbers: "on",
               roundedSelection: true,
             }}
           />
@@ -226,7 +258,7 @@ const AppUpdateModal = () => {
             transition={{ duration: 0.3 }}
             key={output}
           >
-            {output || 'No output yet. Run your code to see results.'}
+            {output || "No output yet. Run your code to see results."}
           </motion.pre>
         </div>
         {error && (
