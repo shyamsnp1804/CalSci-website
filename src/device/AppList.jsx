@@ -45,7 +45,7 @@ const AppList = ({
                 <td className="p-3">
                   <button
                     onClick={() => onPreview(app.app_name)}
-                    className="text-blue-600 hover:underline"
+                    className="text-blue-600 hover:underline hover:cursor-pointer hover:text-blue-900"
                   >
                     {app.app_name}
                   </button>
@@ -56,14 +56,14 @@ const AppList = ({
                 <td className="p-3 flex gap-5">
                   <button
                     onClick={() => onUpdate(app.app_name)}
-                    className="text-yellow-600 hover:text-yellow-900"
+                    className="text-yellow-600 hover:text-yellow-900 hover:cursor-pointer"
                     title="Update App"
                   >
                     <Edit2 size={22} />
                   </button>
                   <button
                     onClick={() => onDelete(app.app_name)}
-                    className="text-red-600 hover:text-red-900"
+                    className="text-red-600 hover:text-red-900 hover:cursor-pointer"
                     title="Delete App"
                   >
                     <Trash2 size={22} />

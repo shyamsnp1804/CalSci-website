@@ -24,10 +24,6 @@ function SignIn() {
     );
   }
 
-  if (isAuthenticated) {
-    return <Navigate to="/" replace />;
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
