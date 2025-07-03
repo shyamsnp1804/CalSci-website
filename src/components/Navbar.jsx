@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { AuthContext } from "../context/AuthContext";
+import { supabase } from "../configSupabase/config";
 
 function Navbar() {
   const location = useLocation();
@@ -10,6 +11,7 @@ function Navbar() {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [devicePath, setDevicePath] = useState("/device/add");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +24,39 @@ function Navbar() {
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const fetchDevicePath = async () => {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const { data, error } = await supabase
+              .from('macaddresses')
+              .select('mac_address')
+              .eq('user_id', user.id)
+              .limit(1);
+
+            if (error) {
+              console.error('Navbar: Error fetching devices:', error.message);
+              setDevicePath("/device/add");
+              return;
+            }
+
+            if (data && data.length > 0) {
+              setDevicePath(`/device/${data[0].mac_address}`);
+            } else {
+              setDevicePath("/device/add");
+            }
+          }
+        } catch (err) {
+          console.error('Navbar: Fetch error:', err.message);
+          setDevicePath("/device/add");
+        }
+      };
+      fetchDevicePath();
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = async () => {
     await logout();
@@ -55,28 +90,27 @@ function Navbar() {
           >
             Home
           </Link>
-
-             <Link
-                to="/codeEditor"
-                className={`text-sm font-medium px-4 py-2 rounded transition ${
-                  location.pathname === "/codeEditor"
-                    ? "text-blue-600 border-b-2 border-blue-600"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
-                }`}
-              >
-                Code Editor
-              </Link>
+          <Link
+            to="/codeEditor"
+            className={`text-sm font-medium px-4 py-2 rounded transition ${
+              location.pathname === "/codeEditor"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+            }`}
+          >
+            Code Editor
+          </Link>
           {isAuthenticated ? (
             <>
               <Link
-                to="/dashboard"
+                to={devicePath}
                 className={`text-sm font-medium px-4 py-2 rounded transition ${
-                  location.pathname === "/dashboard"
+                  location.pathname.startsWith("/device")
                     ? "text-blue-600 border-b-2 border-blue-600"
                     : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
                 }`}
               >
-                Dashboard
+                Your Device
               </Link>
               <button
                 onClick={handleLogout}
@@ -87,8 +121,6 @@ function Navbar() {
             </>
           ) : (
             <>
-         
-
               <Link
                 to="/signin"
                 className={`text-sm font-medium px-4 py-2 rounded transition ${
@@ -140,28 +172,27 @@ function Navbar() {
             >
               Home
             </Link>
-
-               <Link
-                to="/codeEditor"
-                className={`text-base font-medium px-4 py-2 rounded ${
-                  location.pathname === "/codeEditor"
-                    ? "bg-blue-100 text-blue-700"
-                    : "hover:bg-blue-100"
-                }`}
-              >
-                Code Editor
-              </Link>
+            <Link
+              to="/codeEditor"
+              className={`text-base font-medium px-4 py-2 rounded ${
+                location.pathname === "/codeEditor"
+                  ? "bg-blue-100 text-blue-700"
+                  : "hover:bg-blue-100"
+              }`}
+            >
+              Code Editor
+            </Link>
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/dashboard"
+                  to={devicePath}
                   className={`text-base font-medium px-4 py-2 rounded ${
-                    location.pathname === "/dashboard"
+                    location.pathname.startsWith("/device")
                       ? "bg-blue-100 text-blue-700"
                       : "hover:bg-blue-100"
                   }`}
                 >
-                  Dashboard
+                  Your Device
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -172,7 +203,6 @@ function Navbar() {
               </>
             ) : (
               <>
-
                 <Link
                   to="/signin"
                   className={`text-base font-medium px-4 py-2 rounded ${

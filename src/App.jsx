@@ -2,100 +2,57 @@ import React, { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
-import { supabase } from "./configSupabase/config";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import Dashboard from "./pages/Dashboard";
 import CodeEditor from "./pages/CodeEditor";
-import AppCodeEditor from "./pages/dashboard/AppCodeEditor";
-import AppCodePreview from "./pages/dashboard/AppCodePreview";
-import AppUpdateModal from "./pages/dashboard/AppUpdateModal";
-import AppDeleteModal from "./pages/dashboard/AppDeleteModal";
+import Device from "./device/Device";
+import AddDevice from "./device/AddDevice";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
+
+  if (loading) {
+    console.log('App: Initializing auth context');
+    return <div className="min-h-screen flex items-center justify-center text-gray-700">Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-grow">
-        {loading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center text-gray-700">Loading...</div>
-          </div>
-        ) : (
-          <AnimatePresence mode="wait">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route
-                path="/dashboard"
-                element={
-                  isAuthenticated ? (
-                    <Dashboard />
-                  ) : (
-                    <Navigate to="/signin" replace />
-                  )
-                }
-              />
-              <Route
-                path="/dashboard/code-editor/:macAddress"
-                element={
-                  isAuthenticated ? (
-                    <AppCodeEditor />
-                  ) : (
-                    <Navigate to="/signin" replace />
-                  )
-                }
-              />
-              <Route path="/codeEditor" element={<CodeEditor />} />
-              <Route
-                path="/dashboard/code-preview/:macAddress/:appName"
-                element={
-                  isAuthenticated ? (
-                    <AppCodePreview />
-                  ) : (
-                    <Navigate to="/signin" replace />
-                  )
-                }
-              />
-              <Route
-                path="/dashboard/update-app/:macAddress/:appName"
-                element={
-                  isAuthenticated ? (
-                    <AppUpdateModal />
-                  ) : (
-                    <Navigate to="/signin" replace />
-                  )
-                }
-              />
-              <Route
-                path="/dashboard/delete-app/:macAddress/:appName"
-                element={
-                  isAuthenticated ? (
-                    <AppDeleteModal />
-                  ) : (
-                    <Navigate to="/signin" replace />
-                  )
-                }
-              />
-              <Route
-                path="/verify"
-                element={
-                  isAuthenticated ? (
-                    <Navigate to="/dashboard" replace />
-                  ) : (
-                    <Navigate to="/signup" replace />
-                  )
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </AnimatePresence>
-        )}
+        <AnimatePresence mode="wait">
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={<Home />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/codeEditor" element={<CodeEditor />} />
+
+            {/* Protected Routes */}
+            <Route
+              path="/device/add"
+              element={isAuthenticated ? <AddDevice /> : <Navigate to="/signin" replace />}
+            />
+            <Route
+              path="/device/:macAddress"
+              element={isAuthenticated ? <Device /> : <Navigate to="/signin" replace />}
+            />
+            <Route
+              path="/verify"
+              element={
+                isAuthenticated ? (
+                  <Navigate to="/" replace />
+                ) : (
+                  <Navigate to="/signup" replace />
+                )
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AnimatePresence>
       </main>
     </div>
   );
