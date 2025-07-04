@@ -8,7 +8,7 @@ export const useMicroPython = () => {
 
   const initMicroPython = async () => {
     setIsLoading(true);
-    setOutput('Loading MicroPython...');
+    setOutput('');
     try {
       const script = document.createElement('script');
       script.src = '/micropython.mjs';
@@ -55,7 +55,7 @@ export const useMicroPython = () => {
 
           try {
             await micropythonRef.current.runCode('print("MicroPython test successful")');
-            setOutput('MicroPython initialized\nTest output: MicroPython test successful');
+            setOutput('');
           } catch (testError) {
             console.warn('Test execution failed:', testError);
             setOutput(`MicroPython initialized\nTest failed: ${testError.message}`);

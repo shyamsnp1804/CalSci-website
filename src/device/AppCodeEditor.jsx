@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
@@ -6,6 +6,7 @@ import { Play, Save } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import { useMicroPython } from "../codeEditor/microPythonLogic";
 import { supabase } from "../configSupabase/config";
+import Display from "../display/Display";
 
 const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_APP;
 
@@ -16,6 +17,7 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
   const [appName, setAppName] = useState("");
   const [canSave, setCanSave] = useState(false);
   const [error, setError] = useState("");
+  const [displayText, setDisplayText] = useState("");
 
   // Monaco Editor setup
   const handleEditorDidMount = (editor, monacoInstance) => {
@@ -61,7 +63,12 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
   const handleRunCode = () => {
     const code = editorRef.current.getValue();
     runCode(code);
-    setTimeout(() => {
+  };
+
+  // Update display and save state based on output
+  useEffect(() => {
+    if (output) {
+      setDisplayText(output);
       if (!output.includes("Error")) {
         setCanSave(true);
         setError("");
@@ -69,8 +76,8 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
         setCanSave(false);
         setError("Code execution failed");
       }
-    }, 100);
-  };
+    }
+  }, [output]);
 
   // Save app
   const handleSave = async () => {
@@ -125,7 +132,7 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
       onClick={onClose}
     >
       <motion.div
-        className="bg-white/90 rounded-xl shadow-xl p-6 w-full max-w-4xl border border-blue-200"
+        className="bg-white/90 rounded-xl shadow-xl p-6 w-full max-w-6xl border border-blue-200"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -179,34 +186,43 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
             Cancel
           </motion.button>
         </div>
-        <div className="bg-white/90 rounded-lg shadow-inner overflow-hidden border border-blue-200 mb-4">
-          <Editor
-            height="50vh"
-            language="micropython"
-            theme="vs-dark"
-            defaultValue="# Write MicroPython code here\nprint('Hello, MicroPython!')"
-            onMount={handleEditorDidMount}
-            options={{
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              fontSize: 14,
-              padding: { top: 16, bottom: 16 },
-              lineNumbers: "on",
-              roundedSelection: true,
-            }}
-          />
-        </div>
-        <div className="bg-gradient-to-br from-sky-200 to-purple-300 rounded-lg shadow-inner p-4 border border-purple-200">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">Output</h3>
-          <motion.pre
-            className="text-sm text-gray-800 bg-white/80 p-4 rounded-lg whitespace-pre-wrap font-mono"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            key={output}
-          >
-            {output || "No output yet. Run your code to see results."}
-          </motion.pre>
+        <div className="flex flex-row gap-4">
+          <div className="flex-1 flex flex-col">
+            <div className="bg-white/90 rounded-lg shadow-inner overflow-hidden border border-blue-200 mb-4">
+              <Editor
+                height="50vh"
+                language="micropython"
+                theme="vs-dark"
+                defaultValue="print('Hello, MicroPython!')"
+                onMount={handleEditorDidMount}
+                options={{
+                  minimap: { enabled: false },
+                  scrollBeyondLastLine: false,
+                  fontSize: 14,
+                  padding: { top: 16, bottom: 16 },
+                  lineNumbers: "on",
+                  roundedSelection: true,
+                }}
+              />
+            </div>
+            <div className="bg-gradient-to-br from-sky-200 to-purple-300 rounded-lg shadow-inner p-4 border border-purple-200">
+              <h3 className="text-lg font-semibold text-blue-800 mb-2">
+                Output
+              </h3>
+              <motion.pre
+                className="text-sm text-gray-800 bg-white/80 p-4 rounded-lg whitespace-pre-wrap font-mono"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+                key={output}
+              >
+                {output || "No output yet. Run your code to see results."}
+              </motion.pre>
+            </div>
+          </div>
+          <div className="flex-1 flex justify-center">
+            <Display text={displayText} />
+          </div>
         </div>
         {error && (
           <motion.p

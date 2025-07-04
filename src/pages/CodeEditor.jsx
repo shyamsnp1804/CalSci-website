@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
-import Editor from '@monaco-editor/react';
-import * as monaco from 'monaco-editor';
-import { Play } from 'lucide-react';
-import { useMicroPython } from '../codeEditor/microPythonLogic';
+import React, { useRef } from "react";
+import { motion } from "framer-motion";
+import Editor from "@monaco-editor/react";
+import * as monaco from "monaco-editor";
+import { Play } from "lucide-react";
+import { useMicroPython } from "../codeEditor/microPythonLogic";
 
 const CodeEditor = () => {
   const editorRef = useRef(null);
@@ -11,33 +11,37 @@ const CodeEditor = () => {
 
   const handleEditorDidMount = (editor, monacoInstance) => {
     editorRef.current = editor;
-    monacoInstance.languages.register({ id: 'micropython' });
-    monacoInstance.languages.setMonarchTokensProvider('micropython', {
+    monacoInstance.languages.register({ id: "micropython" });
+    monacoInstance.languages.setMonarchTokensProvider("micropython", {
       tokenizer: {
         root: [
-          [/#.*$/, 'comment'],
-          [/def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/, 'keyword'],
-          [/(print|if|else|for|while|def|class|import|from)/, 'keyword'],
-          [/"(?:\\.|.)*?"/, 'string'],
-          [/'(?:\\.|.)*?'/, 'string'],
-          [/\d+/, 'number'],
+          [/#.*$/, "comment"],
+          [/def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/, "keyword"],
+          [/(print|if|else|for|while|def|class|import|from)/, "keyword"],
+          [/"(?:\\.|.)*?"/, "string"],
+          [/'(?:\\.|.)*?'/, "string"],
+          [/\d+/, "number"],
         ],
       },
     });
-    monacoInstance.languages.setLanguageConfiguration('micropython', {
-      comments: { lineComment: '#' },
-      brackets: [['{', '}'], ['[', ']'], ['(', ')']],
+    monacoInstance.languages.setLanguageConfiguration("micropython", {
+      comments: { lineComment: "#" },
+      brackets: [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+      ],
       autoClosingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
+        { open: "{", close: "}" },
+        { open: "[", close: "]" },
+        { open: "(", close: ")" },
         { open: '"', close: '"' },
         { open: "'", close: "'" },
       ],
       surroundingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
+        { open: "{", close: "}" },
+        { open: "[", close: "]" },
+        { open: "(", close: ")" },
         { open: '"', close: '"' },
         { open: "'", close: "'" },
       ],
@@ -78,11 +82,13 @@ const CodeEditor = () => {
             onClick={handleRunCode}
             disabled={isLoading}
             className={`flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-2 rounded-full font-medium transition-colors ${
-              isLoading ? 'opacity-50 cursor-not-allowed' : 'hover:from-blue-600 hover:to-purple-700'
+              isLoading
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:from-blue-600 hover:to-purple-700"
             }`}
           >
             <Play size={18} />
-            {isLoading ? 'Running...' : 'Run Code'}
+            {isLoading ? "Running..." : "Run Code"}
           </motion.button>
         </motion.div>
 
@@ -96,14 +102,14 @@ const CodeEditor = () => {
             height="60vh"
             language="micropython"
             theme="vs-dark"
-            defaultValue="# Write MicroPython code here\nprint('Hello, MicroPython!')"
+            defaultValue="print('Hello, MicroPython!')"
             onMount={handleEditorDidMount}
             options={{
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
               fontSize: 14,
               padding: { top: 16, bottom: 16 },
-              lineNumbers: 'on',
+              lineNumbers: "on",
               roundedSelection: true,
             }}
           />
@@ -123,7 +129,7 @@ const CodeEditor = () => {
             transition={{ duration: 0.3 }}
             key={output}
           >
-            {output || 'No output yet. Run your code to see results.'}
+            {output || "No output yet. Run your code to see results."}
           </motion.pre>
         </motion.div>
       </div>
@@ -132,6 +138,3 @@ const CodeEditor = () => {
 };
 
 export default CodeEditor;
-
-
-
