@@ -100,6 +100,16 @@ function Navbar() {
           >
             Code Editor
           </Link>
+            <Link
+            to="/display"
+            className={`text-sm font-medium px-4 py-2 rounded transition ${
+              location.pathname === "/display"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+            }`}
+          >
+            Display
+          </Link>
           {isAuthenticated ? (
             <>
               <Link

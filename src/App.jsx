@@ -10,6 +10,7 @@ import CodeEditor from "./pages/CodeEditor";
 import Device from "./device/Device";
 import AddDevice from "./device/AddDevice";
 import NotFound from "./pages/NotFound";
+import DisplayPage from "./pages/DisplayPages";
 
 function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -30,6 +31,7 @@ function App() {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/codeEditor" element={<CodeEditor />} />
+             <Route path="/display" element={<DisplayPage />} />
 
             {/* Protected Routes */}
             <Route
