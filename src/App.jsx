@@ -16,7 +16,6 @@ function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
 
   if (loading) {
-    console.log('App: Initializing auth context');
     return <div className="min-h-screen flex items-center justify-center text-gray-700">Loading...</div>;
   }
 

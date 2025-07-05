@@ -1,29 +1,36 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 
 export const useMicroPython = () => {
-  const [output, setOutput] = useState('');
+  const [output, setOutput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const micropythonRef = useRef(null);
   const outputBuffer = useRef([]);
 
   const initMicroPython = async () => {
     setIsLoading(true);
-    setOutput('');
+    setOutput("");
     try {
-      const script = document.createElement('script');
-      script.src = '/micropython.mjs';
-      script.type = 'module';
+      const script = document.createElement("script");
+      script.src = "/micropython.mjs";
+      script.type = "module";
       script.async = true;
 
       script.onload = async () => {
         try {
           if (!window.loadMicroPython) {
-            throw new Error('loadMicroPython global not found. Available globals: ' + Object.keys(window).filter(key => key.toLowerCase().includes('python')).join(', '));
+            throw new Error(
+              "loadMicroPython global not found. Available globals: " +
+                Object.keys(window)
+                  .filter((key) => key.toLowerCase().includes("python"))
+                  .join(", ")
+            );
           }
 
-          const wasmResponse = await fetch('/micropython.wasm');
+          const wasmResponse = await fetch("/micropython.wasm");
           if (!wasmResponse.ok) {
-            throw new Error(`Failed to fetch micropython.wasm: ${wasmResponse.statusText}`);
+            throw new Error(
+              `Failed to fetch micropython.wasm: ${wasmResponse.statusText}`
+            );
           }
           const wasmBinary = await wasmResponse.arrayBuffer();
 
@@ -31,14 +38,28 @@ export const useMicroPython = () => {
             wasmBinary,
             stdout: (text) => {
               outputBuffer.current.push(text);
-              setOutput(outputBuffer.current.join(''));
+              setOutput(outputBuffer.current.join(""));
             },
           });
 
-          const possibleExecMethods = ['runPython', 'exec', 'eval', 'runCode', 'run_script', 'execute'];
-          const execMethod = possibleExecMethods.find(method => typeof micropython[method] === 'function');
+          const possibleExecMethods = [
+            "runPython",
+            "exec",
+            "eval",
+            "runCode",
+            "run_script",
+            "execute",
+          ];
+          const execMethod = possibleExecMethods.find(
+            (method) => typeof micropython[method] === "function"
+          );
           if (!execMethod) {
-            throw new Error('No execution method found. Available methods: ' + Object.getOwnPropertyNames(Object.getPrototypeOf(micropython)).concat(Object.keys(micropython)).join(', '));
+            throw new Error(
+              "No execution method found. Available methods: " +
+                Object.getOwnPropertyNames(Object.getPrototypeOf(micropython))
+                  .concat(Object.keys(micropython))
+                  .join(", ")
+            );
           }
 
           micropythonRef.current = {
@@ -46,38 +67,95 @@ export const useMicroPython = () => {
               try {
                 outputBuffer.current = [];
                 await micropython[execMethod](code);
-                return outputBuffer.current.join('');
+                return outputBuffer.current.join("");
               } catch (error) {
                 throw new Error(`Execution failed: ${error.message}`);
               }
             },
+            FS: micropython.FS,
           };
 
+          // Create /lib directory
           try {
-            await micropythonRef.current.runCode('print("MicroPython test successful")');
-            setOutput('');
+            micropythonRef.current.FS.mkdir("/lib");
+          } catch (e) {
+            console.warn("Failed to create /lib directory:", e);
+          }
+
+          // Preload custom modules
+          const modules = ["hello.py", "electrical.py"];
+          for (const mod of modules) {
+            try {
+              const response = await fetch(`/lib/${mod}`);
+              if (!response.ok) {
+                throw new Error(
+                  `Failed to fetch /lib/${mod}: ${response.statusText}`
+                );
+              }
+              const moduleContent = await response.text();
+              micropythonRef.current.FS.writeFile(`/lib/${mod}`, moduleContent);
+              // Verify file
+              const writtenContent = micropythonRef.current.FS.readFile(
+                `/lib/${mod}`,
+                { encoding: "utf8" }
+              );
+            } catch (moduleError) {
+              console.error(`Failed to preload ${mod}:`, moduleError);
+              setOutput(
+                (prev) =>
+                  `${prev}\nError: Failed to load module ${mod} - ${moduleError.message}`
+              );
+            }
+          }
+
+          // Update sys.path
+          try {
+            await micropythonRef.current.runCode(`
+              import sys
+              sys.path.append('/lib')
+              print("sys.path:", sys.path)  # Debug
+              `);
+          } catch (pathError) {
+            console.error("Failed to update sys.path:", pathError);
+            setOutput(
+              (prev) =>
+                `${prev}\nError: Failed to set sys.path - ${pathError.message}`
+            );
+          }
+
+          try {
+            await micropythonRef.current.runCode(
+              'print("MicroPython test successful")'
+            );
+            setOutput("");
           } catch (testError) {
-            console.warn('Test execution failed:', testError);
-            setOutput(`MicroPython initialized\nTest failed: ${testError.message}`);
+            console.warn("Test execution failed:", testError);
+            setOutput(
+              `MicroPython initialized\nTest failed: ${testError.message}`
+            );
           }
 
           setIsLoading(false);
         } catch (error) {
-          console.error('Initialization error:', error);
-          setOutput(`Error: Failed to initialize MicroPython - ${error.message}`);
+          console.error("Initialization error:", error);
+          setOutput(
+            `Error: Failed to initialize MicroPython - ${error.message}`
+          );
           setIsLoading(false);
         }
       };
 
       script.onerror = () => {
-        console.error('Failed to load micropython.mjs');
-        setOutput('Error: Failed to load MicroPython module (check /micropython.mjs in public folder)');
+        console.error("Failed to load micropython.mjs");
+        setOutput(
+          "Error: Failed to load MicroPython module (check /micropython.mjs in public folder)"
+        );
         setIsLoading(false);
       };
 
       document.head.appendChild(script);
     } catch (error) {
-      console.error('Setup error:', error);
+      console.error("Setup error:", error);
       setOutput(`Error: ${error.message}`);
       setIsLoading(false);
     }
@@ -85,20 +163,20 @@ export const useMicroPython = () => {
 
   const runCode = async (code) => {
     if (isLoading) {
-      setOutput('Please wait, MicroPython is still loading...');
+      setOutput("Please wait, MicroPython is still loading...");
       return;
     }
     if (!micropythonRef.current) {
-      setOutput('Error: MicroPython not initialized');
+      setOutput("Error: MicroPython not initialized");
       return;
     }
 
     try {
       outputBuffer.current = [];
       await micropythonRef.current.runCode(code);
-      setOutput(outputBuffer.current.join('') || 'No output');
+      setOutput(outputBuffer.current.join("") || "No output");
     } catch (error) {
-      console.error('Execution error:', error);
+      console.error("Execution error:", error);
       setOutput(`Error: ${error.message}`);
     }
   };
@@ -106,8 +184,10 @@ export const useMicroPython = () => {
   useEffect(() => {
     initMicroPython();
     return () => {
-      const scripts = document.head.querySelectorAll('script[src="/micropython.mjs"]');
-      scripts.forEach(script => script.remove());
+      const scripts = document.head.querySelectorAll(
+        'script[src="/micropython.mjs"]'
+      );
+      scripts.forEach((script) => script.remove());
     };
   }, []);
 
