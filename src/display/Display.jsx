@@ -40,8 +40,8 @@ const Display = ({ text }) => {
       const ctx = canvas.getContext("2d");
       ctx.imageSmoothingEnabled = false;
 
-      const pixelSize = 3.54;
-      const gap = 0.4;
+      const pixelSize = 5;
+      const gap = 1;
       const pixelWithGap = pixelSize + gap;
 
       ctx.fillStyle = "#c0d8c0";
@@ -83,10 +83,6 @@ const Display = ({ text }) => {
           xOffset += 6 * pixelWithGap;
         }
       }
-      console.log(
-        `Display: Rendered ${displayLines.length} lines on ST7565 simulator:`,
-        displayLines
-      );
     }
   }, [text]);
 
@@ -97,8 +93,8 @@ const Display = ({ text }) => {
       </h1>
       <canvas
         ref={canvasRef}
-        width={128 * (3.54 + 0.4)}
-        height={64 * (3.54 + 0.4)}
+        width={128 * (5 + 1)}
+        height={64 * (5 + 1)}
         style={{ width: "453.6px", height: "226.8px" }}
         className="bg-transparent mb-4"
       ></canvas>
