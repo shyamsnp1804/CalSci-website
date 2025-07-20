@@ -3,28 +3,28 @@ import { motion } from "framer-motion";
 import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import { Play } from "lucide-react";
-import { useMicroPython } from "../codeEditor/microPythonLogic";
+import { usePython } from "../codeEditorLogic/pythonLogic";
 
 const CodeEditor = () => {
   const editorRef = useRef(null);
-  const { output, isLoading, runCode } = useMicroPython();
+  const { output, isLoading, runCode } = usePython();
 
   const handleEditorDidMount = (editor, monacoInstance) => {
     editorRef.current = editor;
-    monacoInstance.languages.register({ id: "micropython" });
-    monacoInstance.languages.setMonarchTokensProvider("micropython", {
+    monacoInstance.languages.register({ id: "python" });
+    monacoInstance.languages.setMonarchTokensProvider("python", {
       tokenizer: {
         root: [
           [/#.*$/, "comment"],
           [/def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/, "keyword"],
-          [/(print|if|else|for|while|def|class|import|from)/, "keyword"],
+          [/(print|if|else|elif|for|while|def|class|import|from|try|except|return)/, "keyword"],
           [/"(?:\\.|.)*?"/, "string"],
           [/'(?:\\.|.)*?'/, "string"],
-          [/\d+/, "number"],
+          [/\d+\.?\d*/, "number"],
         ],
       },
     });
-    monacoInstance.languages.setLanguageConfiguration("micropython", {
+    monacoInstance.languages.setLanguageConfiguration("python", {
       comments: { lineComment: "#" },
       brackets: [
         ["{", "}"],
@@ -67,7 +67,7 @@ const CodeEditor = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          MicroPython Code Editor
+          Python Code Editor
         </motion.h1>
 
         <motion.div
@@ -100,9 +100,9 @@ const CodeEditor = () => {
         >
           <Editor
             height="60vh"
-            language="micropython"
+            language="python"
             theme="vs-dark"
-            defaultValue="print('Hello, MicroPython!')"
+            defaultValue="print('Hello, Python!')"
             onMount={handleEditorDidMount}
             options={{
               minimap: { enabled: false },
@@ -127,9 +127,9 @@ const CodeEditor = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            key={output}
+            key={output.join("\n")}
           >
-            {output || "No output yet. Run your code to see results."}
+            {output.length > 0 ? output.join("\n") : "No output yet. Run your code to see results."}
           </motion.pre>
         </motion.div>
       </div>
