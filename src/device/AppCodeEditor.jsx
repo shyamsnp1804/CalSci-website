@@ -4,7 +4,7 @@ import Editor from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import { Play, Save } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
-import { useMicroPython } from "../codeEditor/microPythonLogic";
+import { usePython } from "../codeEditorLogic/pythonLogic";
 import { supabase } from "../configSupabase/config";
 import Display from "../display/Display";
 
@@ -13,7 +13,7 @@ const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_CREATE_APP;
 const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
   const { isAuthenticated } = useContext(AuthContext);
   const editorRef = useRef(null);
-  const { output, isLoading, runCode } = useMicroPython();
+  const { output, isLoading, runCode } = usePython();
   const [appName, setAppName] = useState("");
   const [canSave, setCanSave] = useState(false);
   const [error, setError] = useState("");
@@ -22,20 +22,20 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
   // Monaco Editor setup
   const handleEditorDidMount = (editor, monacoInstance) => {
     editorRef.current = editor;
-    monacoInstance.languages.register({ id: "micropython" });
-    monacoInstance.languages.setMonarchTokensProvider("micropython", {
+    monacoInstance.languages.register({ id: "python" });
+    monacoInstance.languages.setMonarchTokensProvider("python", {
       tokenizer: {
         root: [
           [/#.*$/, "comment"],
           [/def\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/, "keyword"],
-          [/(print|if|else|for|while|def|class|import|from)/, "keyword"],
+          [/(print|if|else|elif|for|while|def|class|import|from|try|except|return)/, "keyword"],
           [/"(?:\\.|.)*?"/, "string"],
           [/'(?:\\.|.)*?'/, "string"],
-          [/\d+/, "number"],
+          [/\d+\.?\d*/, "number"],
         ],
       },
     });
-    monacoInstance.languages.setLanguageConfiguration("micropython", {
+    monacoInstance.languages.setLanguageConfiguration("python", {
       comments: { lineComment: "#" },
       brackets: [
         ["{", "}"],
@@ -67,9 +67,9 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
 
   // Update display and save state based on output
   useEffect(() => {
-    if (output) {
-      setDisplayText(output);
-      if (!output.includes("Error")) {
+    if (output.length > 0) {
+      setDisplayText(output.join("\n"));
+      if (!output.some(line => line.startsWith("Error"))) {
         setCanSave(true);
         setError("");
       } else {
@@ -191,9 +191,9 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
             <div className="bg-white/90 rounded-lg shadow-inner overflow-hidden border border-blue-200 mb-4">
               <Editor
                 height="50vh"
-                language="micropython"
+                language="python"
                 theme="vs-dark"
-                defaultValue="print('Hello, MicroPython!')"
+                defaultValue="print('Hello, Python!')"
                 onMount={handleEditorDidMount}
                 options={{
                   minimap: { enabled: false },
@@ -214,9 +214,9 @@ const AppCodeEditor = ({ macAddress, onClose, onSave }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.3 }}
-                key={output}
+                key={output.join("\n")}
               >
-                {output || "No output yet. Run your code to see results."}
+                {output.length > 0 ? output.join("\n") : "No output yet. Run your code to see results."}
               </motion.pre>
             </div>
           </div>
