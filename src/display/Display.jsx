@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { usePython } from "../codeEditor/pythonLogic";
+import { usePython } from "../codeEditorLogic/pythonLogic";
 import font5x7Data from "./Font";
 
 const hexToBitmap = (hexArray) => {
