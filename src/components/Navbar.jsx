@@ -83,14 +83,24 @@ function Navbar() {
 
         <nav className="hidden md:flex items-center space-x-8">
           <Link
-            to="/"
+            to="/about"
             className={`text-base font-medium px-4 py-2 rounded transition ${
-              location.pathname === "/"
+              location.pathname === "/about"
                 ? "text-blue-600 border-b-2 border-blue-600"
                 : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
             }`}
           >
-            Home
+            About
+          </Link>
+          <Link
+            to="/appstore"
+            className={`text-base font-medium px-4 py-2 rounded transition ${
+              location.pathname === "/appstore"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
+            }`}
+          >
+            AppStore
           </Link>
           <Link
             to="/codeEditor"
@@ -101,16 +111,6 @@ function Navbar() {
             }`}
           >
             Code Editor
-          </Link>
-          <Link
-            to="/about"
-            className={`text-base font-medium px-4 py-2 rounded transition ${
-              location.pathname === "/about"
-                ? "text-blue-600 border-b-2 border-blue-600"
-                : "text-gray-700 hover:text-blue-600 hover:bg-blue-100"
-            }`}
-          >
-            About
           </Link>
           <Link
             to="/contact"
@@ -185,14 +185,24 @@ function Navbar() {
             className="flex flex-col md:hidden bg-blue-50 px-6 pt-4 pb-8 shadow-md space-y-3"
           >
             <Link
-              to="/"
+              to="/about"
               className={`text-base font-medium px-4 py-2 rounded ${
-                location.pathname === "/"
+                location.pathname === "/about"
                   ? "bg-blue-100 text-blue-700"
                   : "hover:bg-blue-100"
               }`}
             >
-              Home
+              About
+            </Link>
+            <Link
+              to="/appstore"
+              className={`text-base font-medium px-4 py-2 rounded ${
+                location.pathname === "/appstore"
+                  ? "bg-blue-100 text-blue-700"
+                  : "hover:bg-blue-100"
+              }`}
+            >
+              AppStore
             </Link>
             <Link
               to="/codeEditor"
@@ -203,16 +213,6 @@ function Navbar() {
               }`}
             >
               Code Editor
-            </Link>
-            <Link
-              to="/about"
-              className={`text-base font-medium px-4 py-2 rounded ${
-                location.pathname === "/about"
-                  ? "bg-blue-100 text-blue-700"
-                  : "hover:bg-blue-100"
-              }`}
-            >
-              About
             </Link>
             <Link
               to="/contact"

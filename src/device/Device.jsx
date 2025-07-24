@@ -39,7 +39,7 @@ const Device = () => {
 
         const { data, error } = await supabase
           .from(`device_${macAddress}`)
-          .select("app_name, file_path, is_downloaded");
+          .select("app_name, description, status, file_path, is_downloaded");
 
         if (error) {
           console.error("Device: Error fetching apps:", error.message);
