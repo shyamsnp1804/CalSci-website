@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import DisplayPage from "./pages/DisplayPages";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import AppStore from "./pages/AppStore";
 
 function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -35,6 +36,7 @@ function App() {
              <Route path="/display" element={<DisplayPage />} />
               <Route path="/about" element={<About/>} />
                <Route path="/contact" element={<Contact />} />
+            <Route path="/appstore" element={<AppStore />} />
 
             {/* Protected Routes */}
             <Route

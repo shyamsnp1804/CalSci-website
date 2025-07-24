@@ -33,7 +33,7 @@ function Home() {
                     Get Started
                   </motion.button>
                 </Link>
-                <Link to="/learn-more">
+                <Link to="/about">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
