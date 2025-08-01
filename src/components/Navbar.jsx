@@ -92,6 +92,15 @@ function Navbar() {
           >
             About
           </Link>
+          <a
+            href="https://articles.calsci.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`text-base font-medium px-4 py-2 rounded transition text-gray-700 hover:text-blue-600 hover:bg-blue-100`}
+          >
+            Articles
+          </a>
+
           <Link
             to="/appstore"
             className={`text-base font-medium px-4 py-2 rounded transition ${
@@ -194,6 +203,15 @@ function Navbar() {
             >
               About
             </Link>
+            <a
+              href="https://articles.calsci.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`text-base font-medium px-4 py-2 rounded hover:bg-blue-100`}
+            >
+              Articles
+            </a>
+
             <Link
               to="/appstore"
               className={`text-base font-medium px-4 py-2 rounded ${
