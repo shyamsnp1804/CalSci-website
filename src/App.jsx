@@ -11,7 +11,7 @@ import Device from "./device/Device";
 import AddDevice from "./device/AddDevice";
 import NotFound from "./pages/NotFound";
 import DisplayPage from "./pages/DisplayPages";
-import AcidBathView from "./pages/AcidbathView";
+import AcidBath from "./pages/AcidBath";
 
 function App() {
   const { isAuthenticated, loading } = useContext(AuthContext);
@@ -32,7 +32,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/codeEditor" element={<CodeEditor />} />
              <Route path="/display" element={<DisplayPage />} />
-            <Route path="/acidbath" element={<AcidBathView />} />
+            <Route path="/acidbath" element={<AcidBath />} />
             {/* Protected Routes */}
             <Route
               path="/device/add"
