@@ -11,6 +11,7 @@ import Device from "./device/Device";
 import AddDevice from "./device/AddDevice";
 import NotFound from "./pages/NotFound";
 import DisplayPage from "./pages/DisplayPages";
+import AcidBath from "./pages/AcidBath";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import AppStore from "./pages/AppStore";
@@ -34,6 +35,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/codeEditor" element={<CodeEditor />} />
              <Route path="/display" element={<DisplayPage />} />
+            <Route path="/acidbath" element={<AcidBath />} />
               <Route path="/about" element={<About/>} />
                <Route path="/contact" element={<Contact />} />
             <Route path="/appstore" element={<AppStore />} />
