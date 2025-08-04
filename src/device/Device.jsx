@@ -24,38 +24,41 @@ const Device = () => {
     selectedApp: null,
   });
 
-  useEffect(() => {
-    const fetchApps = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (!session) {
-          console.error("Device: No session found");
-          setError("Unauthorized. Please sign in again.");
-          setLoading(false);
-          return;
-        }
-
-        const { data, error } = await supabase
-          .from(`device_${macAddress}`)
-          .select("app_name, description, status, file_path, is_downloaded");
-
-        if (error) {
-          console.error("Device: Error fetching apps:", error.message);
-          setError(error.message);
-          setLoading(false);
-          return;
-        }
-        setApps(data || []);
+  const fetchApps = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) {
+        console.error("Device: No session found");
+        setError("Unauthorized. Please sign in again.");
         setLoading(false);
-      } catch (err) {
-        console.error("Device: Fetch error:", err.message);
-        setError(err.message);
-        setLoading(false);
+        return;
       }
-    };
 
+      const cleanMac = macAddress.toLowerCase().replace(/:/g, '');
+      const { data, error } = await supabase
+        .from(`device_${cleanMac}`)
+        .select("app_name, description, status, file_path, is_downloaded");
+
+      if (error) {
+        console.error("Device: Error fetching apps:", error.message);
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+      setApps(data || []);
+      setLoading(false);
+    } catch (err) {
+      console.error("Device: Fetch error:", err.message);
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchApps();
   }, [macAddress]);
 
@@ -77,23 +80,7 @@ const Device = () => {
     });
 
   const refreshApps = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from(`device_${macAddress}`)
-        .select("app_name, file_path, is_downloaded");
-
-      if (error) {
-        console.error("Device: Error refreshing apps:", error.message);
-        setError(error.message);
-      } else {
-        setApps(data || []);
-      }
-    } catch (err) {
-      console.error("Device: Refresh error:", err.message);
-      setError(err.message);
-    }
-    setLoading(false);
+    await fetchApps();
   };
 
   const containerVariants = {
