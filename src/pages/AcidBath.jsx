@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../configSupabase/config";
 import { Phone, AlertCircle, X, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Trash2 } from "lucide-react";
 
 export default function AcidBath() {
   const [rows, setRows] = useState([]);
@@ -81,6 +82,22 @@ export default function AcidBath() {
       fetchData();
     } else {
       console.error("Failed to add alert threshold");
+    }
+  };
+
+  const deletePhoneNumber = async (number) => {
+    const res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "deletePhoneNumber",
+        phone_numbers: number,
+      }),
+    });
+    if (res.ok) {
+      fetchPhoneNumbers();
+    } else {
+      console.error("Failed to delete phone number");
     }
   };
 
@@ -194,13 +211,20 @@ export default function AcidBath() {
                 Phone Numbers
               </h3>
               <ul className="mb-4 max-h-48 overflow-auto border border-gray-200 rounded-md p-3 space-y-1">
-                {phoneNumbers.map((p, idx) => (
-                  <li
+                {phoneNumbers.map((item, idx) => (
+                  <div
                     key={idx}
-                    className="border-b border-gray-200 last:border-none py-1 text-gray-700"
+                    className="flex items-center justify-between border-b py-2 px-3"
                   >
-                    {p.phone_numbers}
-                  </li>
+                    <span>{item.phone_numbers}</span>
+                    <button
+                      onClick={() => deletePhoneNumber(item.phone_numbers)}
+                      className="text-red-500 hover:text-red-700"
+                      aria-label="Delete phone number"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 ))}
               </ul>
               <input
