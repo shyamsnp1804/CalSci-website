@@ -13,6 +13,11 @@ export default function AcidBath() {
   const [alertMac, setAlertMac] = useState("");
   const [alertTemp, setAlertTemp] = useState("");
 
+  const [deviceInfoData, setDeviceInfoData] = useState([]);
+  const [showDeviceInfoModal, setShowDeviceInfoModal] = useState(false);
+  const [deviceInfoMac, setDeviceInfoMac] = useState("");
+  const [deviceInfoText, setDeviceInfoText] = useState("");
+
   const EDGE_FUNCTION_URL =
     "https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/DSgroup";
 
@@ -25,17 +30,46 @@ export default function AcidBath() {
       .from("alert_thresholds")
       .select("device_mac_address, alert_temp");
 
-    if (tempData && alertData) {
+    const { data: deviceInfoData } = await supabase
+      .from("device_info")
+      .select("device_mac_address, device_info");
+
+    if (tempData && alertData && deviceInfoData) {
       const merged = tempData.map((reading) => {
         const match = alertData.find(
           (a) => a.device_mac_address === reading.device_mac_address
         );
+        const matchInfo = deviceInfoData.find(
+          (info) => info.device_mac_address === reading.device_mac_address
+        );
         return {
           ...reading,
           alert_temp: match ? match.alert_temp : "—",
+          device_info: matchInfo ? matchInfo.device_info : "—",
         };
       });
       setRows(merged);
+    }
+  };
+
+  const addDeviceInfo = async () => {
+    if (!deviceInfoMac.trim() || !deviceInfoText.trim()) return;
+    const res = await fetch(EDGE_FUNCTION_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        mode: "addDeviceInfo",
+        device_mac_address: deviceInfoMac.trim(),
+        device_info: deviceInfoText.trim(),
+      }),
+    });
+    if (res.ok) {
+      setDeviceInfoMac("");
+      setDeviceInfoText("");
+      setShowDeviceInfoModal(false);
+      fetchData();
+    } else {
+      console.error("Failed to save device info");
     }
   };
 
@@ -142,7 +176,19 @@ export default function AcidBath() {
                 className="hover:bg-gray-50 transition-colors duration-200"
               >
                 <td className="px-5 py-3 font-mono text-gray-900">
-                  {r.device_mac_address}
+                  <div className="text-sm text-gray-500">{r.device_mac_address}</div>
+                  <div>
+                    {r.device_info ?? "—"}
+                  </div>
+                  <button
+                    onClick={() => {
+                      setDeviceInfoMac(r.device_mac_address);
+                      setShowDeviceInfoModal(true);
+                    }}
+                    className="text-blue-500 text-xs underline mt-1"
+                  >
+                    Add/Edit Info
+                  </button>
                 </td>
                 <td className="px-5 py-3">{r.temp_val ?? "—"}</td>
                 <td className="px-5 py-3">{fmtDate(r.time_stamp)}</td>
@@ -292,6 +338,55 @@ export default function AcidBath() {
               >
                 <Plus size={16} className="inline-block mr-1" />
                 Save Alert Temperature
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showDeviceInfoModal && (
+          <motion.div
+            className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white rounded-lg shadow-xl w-full max-w-md p-6 relative"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <button
+                onClick={() => setShowDeviceInfoModal(false)}
+                className="absolute top-4 right-4 p-1 text-gray-500 hover:text-gray-800"
+              >
+                <X size={24} />
+              </button>
+              <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                Add/Edit Device Info
+              </h3>
+              <input
+                type="text"
+                placeholder="Device MAC Address"
+                value={deviceInfoMac}
+                onChange={(e) => setDeviceInfoMac(e.target.value)}
+                className="border border-gray-300 rounded-md p-2 w-full mb-3"
+              />
+              <input
+                type="text"
+                placeholder="Device Info"
+                value={deviceInfoText}
+                onChange={(e) => setDeviceInfoText(e.target.value)}
+                className="border border-gray-300 rounded-md p-2 w-full mb-4"
+              />
+              <button
+                onClick={addDeviceInfo}
+                className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2 rounded-md transition"
+              >
+                <Plus size={16} className="inline-block mr-1" />
+                Save Device Info
               </button>
             </motion.div>
           </motion.div>
