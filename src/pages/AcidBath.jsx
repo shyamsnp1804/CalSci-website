@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../configSupabase/config";
-import { Phone, AlertCircle, X, Plus } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  Phone,
+  AlertCircle,
+  X,
+  Plus,
+  Factory,
+  Thermometer,
+  Clock,
+  Bell,
+} from "lucide-react";
+import { motion, AnimatePresence, color } from "framer-motion";
 import { Trash2 } from "lucide-react";
 
 export default function AcidBath() {
@@ -142,29 +151,64 @@ export default function AcidBath() {
     return () => clearInterval(interval);
   }, []);
 
-  const fmtDate = (iso) => (iso ? new Date(iso).toLocaleString() : "—");
+  // Indian locale with 24-hour time
+  const fmtDate = (iso) =>
+    iso
+      ? new Date(iso).toLocaleString("en-IN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+        })
+      : "—";
+
+  const columns = [
+    {
+      title: "Slave Device",
+      icon: <Factory size={16} color="#2563eb" strokeWidth={3} />,
+    },
+    {
+      title: "Temperature (°C)",
+      icon: <Thermometer size={16} color="#f97316" strokeWidth={3} />,
+    },
+    {
+      title: "TimeStamp",
+      icon: <Clock size={16} color="#22c55e" strokeWidth={3} />,
+    },
+    {
+      title: "Alert Temp (°C)",
+      icon: <Bell size={16} color="#dc2626" strokeWidth={3} />,
+    },
+  ];
 
   return (
     <div className="p-4 mt-20 max-w-5xl mx-auto">
+      <div className="mb-6 text-center">
+        <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-400 to-purple-500 text-white rounded-xl shadow-lg">
+          <Factory size={26} strokeWidth={2} />
+          <span className="text-4xl font-extrabold tracking-wide">
+            DS Group
+          </span>
+        </div>
+      </div>
       <h2 className="text-3xl font-extrabold mb-6 text-center text-slate-800">
         Temperature Readings
       </h2>
 
       <div className="overflow-x-auto bg-white rounded-lg shadow-lg border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              {[
-                "Device MAC",
-                "Temperature (°C)",
-                "Timestamp",
-                "Alert Temp (°C)",
-              ].map((title) => (
+          <thead className="bg-gray-100">
+            <tr className="border-b border-gray-400">
+              {columns.map((col) => (
                 <th
-                  key={title}
-                  className="px-5 py-3 text-left text-sm font-semibold text-gray-700"
+                  key={col.title}
+                  className="px-5 py-3 text-left text-sm font-semibold text-gray-900 "
                 >
-                  {title}
+                  {col.icon}
+                  {col.title}
                 </th>
               ))}
             </tr>
@@ -176,16 +220,16 @@ export default function AcidBath() {
                 className="hover:bg-gray-50 transition-colors duration-200"
               >
                 <td className="px-5 py-3 font-mono text-gray-900">
-                  <div className="text-sm text-gray-500">{r.device_mac_address}</div>
-                  <div>
-                    {r.device_info ?? "—"}
+                  <div className="text-sm text-gray-500">
+                    {r.device_mac_address}
                   </div>
+                  <div>{r.device_info ?? "—"}</div>
                   <button
                     onClick={() => {
                       setDeviceInfoMac(r.device_mac_address);
                       setShowDeviceInfoModal(true);
                     }}
-                    className="text-blue-500 text-xs underline mt-1"
+                    className="text-blue-500 text-xs mt-1 hover:text-blue-900 hover:underline"
                   >
                     Add/Edit Info
                   </button>
