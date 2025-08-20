@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence, color } from "framer-motion";
 import { Trash2 } from "lucide-react";
+import { parse } from "date-fns";
 
 export default function AcidBath() {
   const [rows, setRows] = useState([]);
@@ -26,6 +27,8 @@ export default function AcidBath() {
   const [showDeviceInfoModal, setShowDeviceInfoModal] = useState(false);
   const [deviceInfoMac, setDeviceInfoMac] = useState("");
   const [deviceInfoText, setDeviceInfoText] = useState("");
+
+  const [csvDate, setCsvDate] = useState("");
 
   const EDGE_FUNCTION_URL =
     "https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/DSgroup";
@@ -151,20 +154,21 @@ export default function AcidBath() {
     return () => clearInterval(interval);
   }, []);
 
-  // Indian locale with 24-hour time
-  const fmtDate = (iso) =>
-    iso
-      ? new Date(iso).toLocaleString("en-IN", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-        })
-      : "—";
+  const fmtDate = (str) => {
+    if (!str) return "—";
 
+    // Parse "20/08/2025, 05:00:25 am" using date-fns
+    const parsed = parse(str, "dd/MM/yyyy, hh:mm:ss a", new Date());
+    return parsed.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
   const columns = [
     {
       title: "Slave Device",
@@ -183,6 +187,46 @@ export default function AcidBath() {
       icon: <Bell size={16} color="#dc2626" strokeWidth={3} />,
     },
   ];
+
+  const downloadCSVForDate = async () => {
+    if (!csvDate) return alert("Please select a date");
+
+    const { data, error } = await supabase
+      .from("temprecord")
+      .select("temp_val, timestamp");
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    // Parse csvDate (frontend) into numbers
+    const [year, month, day] = csvDate.split("-").map(Number); // YYYY-MM-DD
+
+    const filtered = data.filter((row) => {
+      // Parse DB timestamp
+      const [rowDate] = row.timestamp.split(","); // "20/8/2025"
+      const [rowDay, rowMonth, rowYear] = rowDate.split("/").map(Number);
+      return rowDay === day && rowMonth === month && rowYear === year;
+    });
+
+    if (!filtered.length) return alert("No data found for selected date");
+
+    // Convert to CSV
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      ["temp_val,timestamp"]
+        .concat(filtered.map((r) => `${r.temp_val},${r.timestamp}`))
+        .join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `temperature_${csvDate}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="p-4 mt-20 max-w-5xl mx-auto">
@@ -229,7 +273,7 @@ export default function AcidBath() {
                       setDeviceInfoMac(r.device_mac_address);
                       setShowDeviceInfoModal(true);
                     }}
-                    className="text-blue-500 text-xs mt-1 hover:text-blue-900 hover:underline"
+                    className="text-blue-500 text-xs mt-1 hover:text-orange-700 hover:underline"
                   >
                     Add/Edit Info
                   </button>
@@ -238,11 +282,20 @@ export default function AcidBath() {
                 <td className="px-5 py-3">{fmtDate(r.time_stamp)}</td>
                 <td className="px-5 py-3 font-semibold text-orange-600">
                   {r.alert_temp}
+                  <button
+                    onClick={() => {
+                      setAlertMac(r.device_mac_address); // pre-fill MAC
+                      setShowAlertModal(true);
+                    }}
+                    className="text-blue-500 text-xs mt-1 ml-2 hover:text-orange-700 hover:underline"
+                  >
+                    Add/Edit Alert
+                  </button>
                 </td>
               </tr>
             ))}
 
-            {[...Array(3)].map((_, i) => (
+            {[...Array(1)].map((_, i) => (
               <tr key={`dummy-${i}`}>
                 <td className="px-5 py-6 text-gray-300">—</td>
                 <td className="px-5 py-6 text-gray-300">—</td>
@@ -264,14 +317,28 @@ export default function AcidBath() {
           Manage Phone Numbers
         </button>
 
-        <button
+        {/* <button
           onClick={() => setShowAlertModal(true)}
           className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2 rounded-md shadow-md transition"
           aria-label="Add Alert Temperature"
         >
           <AlertCircle size={20} />
           Add Alert Temperature
-        </button>
+        </button> */}
+        <div className="flex items-center gap-2">
+          <input
+            type="date"
+            value={csvDate}
+            onChange={(e) => setCsvDate(e.target.value)}
+            className="border border-gray-300 p-2 rounded-md"
+          />
+          <button
+            onClick={downloadCSVForDate}
+            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md"
+          >
+            Download CSV
+          </button>
+        </div>
       </div>
 
       <AnimatePresence>
