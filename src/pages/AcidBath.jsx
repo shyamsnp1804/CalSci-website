@@ -343,7 +343,7 @@ export default function AcidBath() {
             }}
             dateFormat="dd/MM/yyyy"
             placeholderText="dd/MM/yyyy"
-            className="border border-gray-300 p-2 rounded-md hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 p-2 rounded-md hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 w-36 sm:w-40"
           />
 
           <button
