@@ -13,6 +13,8 @@ import {
 import { motion, AnimatePresence, color } from "framer-motion";
 import { Trash2 } from "lucide-react";
 import { parse } from "date-fns";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function AcidBath() {
   const [rows, setRows] = useState([]);
@@ -326,12 +328,24 @@ export default function AcidBath() {
           Add Alert Temperature
         </button> */}
         <div className="flex items-center gap-2">
-          <input
+          {/* <input
             type="date"
             value={csvDate}
             onChange={(e) => setCsvDate(e.target.value)}
             className="border border-gray-300 p-2 rounded-md"
+          /> */}
+          <DatePicker
+            selected={csvDate ? new Date(csvDate) : null}
+            onChange={(date) => {
+              if (!date) return;
+              // Save in YYYY-MM-DD so backend stays same
+              setCsvDate(date.toISOString().split("T")[0]);
+            }}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="dd/MM/yyyy"
+            className="border border-gray-300 p-2 rounded-md hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
           <button
             onClick={downloadCSVForDate}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md"
