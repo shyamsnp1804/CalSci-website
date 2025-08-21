@@ -202,24 +202,36 @@ export default function AcidBath() {
       return;
     }
 
-    // Parse csvDate (frontend) into numbers
-    const [year, month, day] = csvDate.split("-").map(Number); // YYYY-MM-DD
+    // Parse dd/MM/yyyy
+    const [day, month, year] = csvDate.split("/").map(Number);
 
     const filtered = data.filter((row) => {
-      // Parse DB timestamp
-      const [rowDate] = row.timestamp.split(","); // "20/8/2025"
+      const [rowDate] = row.timestamp.split(","); // e.g. "20/8/2025"
       const [rowDay, rowMonth, rowYear] = rowDate.split("/").map(Number);
+
       return rowDay === day && rowMonth === month && rowYear === year;
     });
 
     if (!filtered.length) return alert("No data found for selected date");
 
-    // Convert to CSV
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      ["temp_val,timestamp"]
-        .concat(filtered.map((r) => `${r.temp_val},${r.timestamp}`))
-        .join("\n");
+    // Build CSV
+    const csvRows = [];
+
+    // Top row = Date only
+    csvRows.push(`Date: ${csvDate}`);
+    csvRows.push(""); // blank line for spacing
+
+    // Headers
+    csvRows.push("Temperature (°C),Time");
+
+    // Data rows (extract only time part after comma)
+    filtered.forEach((r) => {
+      const [, timePart] = r.timestamp.split(","); // " 8:30:28 am"
+      csvRows.push(`${r.temp_val},${timePart.trim()}`);
+    });
+
+    // Final CSV
+    const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
@@ -335,11 +347,20 @@ export default function AcidBath() {
             className="border border-gray-300 p-2 rounded-md"
           /> */}
           <DatePicker
-            selected={csvDate ? new Date(csvDate) : null}
+            selected={
+              csvDate
+                ? (() => {
+                    const [day, month, year] = csvDate.split("/").map(Number);
+                    return new Date(year, month - 1, day); // Parse dd/MM/yyyy correctly
+                  })()
+                : null
+            }
             onChange={(date) => {
               if (!date) return;
-              // Save in YYYY-MM-DD so backend stays same
-              setCsvDate(date.toISOString().split("T")[0]);
+              const day = String(date.getDate()).padStart(2, "0");
+              const month = String(date.getMonth() + 1).padStart(2, "0");
+              const year = date.getFullYear();
+              setCsvDate(`${day}/${month}/${year}`); // ✅ store in dd/MM/yyyy
             }}
             dateFormat="dd/MM/yyyy"
             placeholderText="dd/MM/yyyy"
