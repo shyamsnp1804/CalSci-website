@@ -26,8 +26,6 @@ export default function AcidBath() {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [alertMac, setAlertMac] = useState("");
   const [alertTemp, setAlertTemp] = useState("");
-
-  const [deviceInfoData, setDeviceInfoData] = useState([]);
   const [showDeviceInfoModal, setShowDeviceInfoModal] = useState(false);
   const [deviceInfoMac, setDeviceInfoMac] = useState("");
   const [deviceInfoText, setDeviceInfoText] = useState("");
@@ -160,8 +158,6 @@ export default function AcidBath() {
 
   const fmtDate = (str) => {
     if (!str) return "—";
-
-    // Parse "20/08/2025, 05:00:25 am" using date-fns
     const parsed = parse(str, "dd/MM/yyyy, hh:mm:ss a", new Date());
     return parsed.toLocaleString("en-IN", {
       day: "2-digit",
@@ -255,8 +251,6 @@ export default function AcidBath() {
       console.error(error);
       return;
     }
-
-    // Parse dd/MM/yyyy
     const [day, month, year] = csvDate.split("/").map(Number);
 
     const filtered = data.filter((row) => {
@@ -268,33 +262,39 @@ export default function AcidBath() {
 
     if (!filtered.length) return alert("No data found for selected date");
 
-    // Build rows → group into pairs (for 4-column layout)
     const tableRows = [];
     for (let i = 0; i < filtered.length; i += 2) {
       const r1 = filtered[i];
       const r2 = filtered[i + 1];
 
-      const time1 = r1?.timestamp.split(",")[1]?.trim() || "—";
-      const time2 = r2?.timestamp.split(",")[1]?.trim() || "—";
+      const formatTime = (ts) => {
+        if (!ts) return "—";
+        const t = ts.split(",")[1]?.trim() || "";
+        const parts = t.split(":");
+        if (parts.length >= 2) {
+          return `${parts[0]}:${parts[1]} ${parts[2]?.split(" ")[1] || ""}`;
+        }
+        return t;
+      };
 
-      tableRows.push([r1?.temp_val ?? "—", time1, r2?.temp_val ?? "—", time2]);
+      const time1 = formatTime(r1?.timestamp);
+      const time2 = formatTime(r2?.timestamp);
+
+      tableRows.push([time1, r1?.temp_val ?? "—", time2, r2?.temp_val ?? "—"]);
     }
 
-    // Create PDF
     const doc = new jsPDF({
       orientation: "portrait",
       unit: "pt",
       format: "a4",
     });
 
-    // Title
     doc.setFontSize(16);
     doc.text(`Temperature Report - ${csvDate}`, 40, 40);
 
-    // Table
     autoTable(doc, {
       startY: 70,
-      head: [["Temperature (°C)", "Time", "Temperature (°C)", "Time"]],
+      head: [["Time", "Temperature (°C)", "Time", "Temperature (°C)"]],
       body: tableRows,
       theme: "grid",
       styles: { halign: "center", valign: "middle" },
@@ -306,7 +306,6 @@ export default function AcidBath() {
       alternateRowStyles: { fillColor: [245, 245, 245] },
     });
 
-    // Save PDF
     doc.save(`temperature_${csvDate}.pdf`);
   };
 
