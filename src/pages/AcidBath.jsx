@@ -32,6 +32,8 @@ export default function AcidBath() {
 
   const [csvDate, setCsvDate] = useState("");
 
+  const [dailyRows, setDailyRows] = useState([]);
+
   const EDGE_FUNCTION_URL =
     "https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/DSgroup";
 
@@ -309,6 +311,28 @@ export default function AcidBath() {
     doc.save(`temperature_${csvDate}.pdf`);
   };
 
+  const showData = async () => {
+    if (!csvDate) return alert("Please select a date");
+
+    const { data, error } = await supabase
+      .from("temprecord")
+      .select("temp_val, timestamp");
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+    const [day, month, year] = csvDate.split("/").map(Number);
+
+    const filtered = data.filter((row) => {
+      const [rowDate] = row.timestamp.split(",");
+      const [rowDay, rowMonth, rowYear] = rowDate.split("/").map(Number);
+      return rowDay === day && rowMonth === month && rowYear === year;
+    });
+
+    setDailyRows(filtered);
+  };
+
   return (
     <div className="p-4 mt-20 max-w-5xl mx-auto">
       <div className="mb-6 text-center">
@@ -439,6 +463,12 @@ export default function AcidBath() {
             className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md"
           >
             Download PDF
+          </button>
+          <button
+            onClick={showData}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+          >
+            Show Data
           </button>
         </div>
       </div>
@@ -605,6 +635,60 @@ export default function AcidBath() {
           </motion.div>
         )}
       </AnimatePresence>
+      {dailyRows.length > 0 && (
+        <div className="mt-10 overflow-x-auto bg-white rounded-lg shadow-lg border border-gray-200">
+          <h3 className="text-2xl font-bold mb-4 text-slate-700 text-center">
+            Data for {csvDate}
+          </h3>
+          <table className="min-w-full divide-y divide-gray-200 text-center">
+            <thead className="bg-gray-100">
+              <tr className="border-b border-gray-400">
+                <th className="px-4 py-3 text-sm font-semibold text-gray-900">
+                  Time
+                </th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-900">
+                  Temp (°C)
+                </th>
+                <th className="hidden sm:table-cell px-4 py-3 text-sm font-semibold text-gray-900">
+                  Time
+                </th>
+                <th className="hidden sm:table-cell px-4 py-3 text-sm font-semibold text-gray-900">
+                  Temp (°C)
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {(() => {
+                const rows = [];
+                for (let i = 0; i < dailyRows.length; i += 2) {
+                  const r1 = dailyRows[i];
+                  const r2 = dailyRows[i + 1];
+
+                  const time1 = r1?.timestamp.split(",")[1]?.trim() || "—";
+                  const time2 = r2?.timestamp?.split(",")[1]?.trim() || "—";
+
+                  rows.push(
+                    <tr
+                      key={i}
+                      className="odd:bg-white even:bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
+                    >
+                      <td className="px-4 py-3">{time1}</td>
+                      <td className="px-4 py-3">{r1?.temp_val ?? "—"}</td>
+                      <td className="hidden sm:table-cell px-4 py-3">
+                        {time2}
+                      </td>
+                      <td className="hidden sm:table-cell px-4 py-3">
+                        {r2?.temp_val ?? "—"}
+                      </td>
+                    </tr>
+                  );
+                }
+                return rows;
+              })()}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
