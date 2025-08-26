@@ -15,6 +15,8 @@ import { Trash2 } from "lucide-react";
 import { parse } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export default function AcidBath() {
   const [rows, setRows] = useState([]);
@@ -190,7 +192,59 @@ export default function AcidBath() {
     },
   ];
 
-  const downloadCSVForDate = async () => {
+  // const downloadCSVForDate = async () => {
+  //   if (!csvDate) return alert("Please select a date");
+
+  //   const { data, error } = await supabase
+  //     .from("temprecord")
+  //     .select("temp_val, timestamp");
+
+  //   if (error) {
+  //     console.error(error);
+  //     return;
+  //   }
+
+  //   // Parse dd/MM/yyyy
+  //   const [day, month, year] = csvDate.split("/").map(Number);
+
+  //   const filtered = data.filter((row) => {
+  //     const [rowDate] = row.timestamp.split(","); // e.g. "20/8/2025"
+  //     const [rowDay, rowMonth, rowYear] = rowDate.split("/").map(Number);
+
+  //     return rowDay === day && rowMonth === month && rowYear === year;
+  //   });
+
+  //   if (!filtered.length) return alert("No data found for selected date");
+
+  //   // Build CSV
+  //   const csvRows = [];
+
+  //   // Top row = Date only
+  //   csvRows.push(`Date: ${csvDate}`);
+  //   csvRows.push(""); // blank line for spacing
+
+  //   // Headers
+  //   csvRows.push("Temperature (°C),Time");
+
+  //   // Data rows (extract only time part after comma)
+  //   filtered.forEach((r) => {
+  //     const [, timePart] = r.timestamp.split(","); // " 8:30:28 am"
+  //     csvRows.push(`${r.temp_val},${timePart.trim()}`);
+  //   });
+
+  //   // Final CSV
+  //   const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
+
+  //   const encodedUri = encodeURI(csvContent);
+  //   const link = document.createElement("a");
+  //   link.setAttribute("href", encodedUri);
+  //   link.setAttribute("download", `temperature_${csvDate}.csv`);
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
+
+  const downloadPDFForDate = async () => {
     if (!csvDate) return alert("Please select a date");
 
     const { data, error } = await supabase
@@ -214,32 +268,46 @@ export default function AcidBath() {
 
     if (!filtered.length) return alert("No data found for selected date");
 
-    // Build CSV
-    const csvRows = [];
+    // Build rows → group into pairs (for 4-column layout)
+    const tableRows = [];
+    for (let i = 0; i < filtered.length; i += 2) {
+      const r1 = filtered[i];
+      const r2 = filtered[i + 1];
 
-    // Top row = Date only
-    csvRows.push(`Date: ${csvDate}`);
-    csvRows.push(""); // blank line for spacing
+      const time1 = r1?.timestamp.split(",")[1]?.trim() || "—";
+      const time2 = r2?.timestamp.split(",")[1]?.trim() || "—";
 
-    // Headers
-    csvRows.push("Temperature (°C),Time");
+      tableRows.push([r1?.temp_val ?? "—", time1, r2?.temp_val ?? "—", time2]);
+    }
 
-    // Data rows (extract only time part after comma)
-    filtered.forEach((r) => {
-      const [, timePart] = r.timestamp.split(","); // " 8:30:28 am"
-      csvRows.push(`${r.temp_val},${timePart.trim()}`);
+    // Create PDF
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "pt",
+      format: "a4",
     });
 
-    // Final CSV
-    const csvContent = "data:text/csv;charset=utf-8," + csvRows.join("\n");
+    // Title
+    doc.setFontSize(16);
+    doc.text(`Temperature Report - ${csvDate}`, 40, 40);
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `temperature_${csvDate}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Table
+    autoTable(doc, {
+      startY: 70,
+      head: [["Temperature (°C)", "Time", "Temperature (°C)", "Time"]],
+      body: tableRows,
+      theme: "grid",
+      styles: { halign: "center", valign: "middle" },
+      headStyles: {
+        fillColor: [41, 128, 185],
+        textColor: 255,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
+    });
+
+    // Save PDF
+    doc.save(`temperature_${csvDate}.pdf`);
   };
 
   return (
@@ -368,10 +436,10 @@ export default function AcidBath() {
           />
 
           <button
-            onClick={downloadCSVForDate}
+            onClick={downloadPDFForDate}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md"
           >
-            Download CSV
+            Download PDF
           </button>
         </div>
       </div>
