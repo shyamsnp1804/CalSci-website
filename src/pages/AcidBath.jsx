@@ -185,7 +185,7 @@ export default function AcidBath() {
       icon: <Clock size={16} color="#22c55e" strokeWidth={3} />,
     },
     {
-      title: "Min. Temp (°C)",
+      title: "Minimum Temp (°C)",
       icon: <Bell size={16} color="#dc2626" strokeWidth={3} />,
     },
   ];
