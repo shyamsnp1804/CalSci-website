@@ -173,7 +173,7 @@ export default function AcidBath() {
   };
   const columns = [
     {
-      title: "Slave Device",
+      title: "Slave Device ID",
       icon: <Factory size={16} color="#2563eb" strokeWidth={3} />,
     },
     {
@@ -181,11 +181,11 @@ export default function AcidBath() {
       icon: <Thermometer size={16} color="#f97316" strokeWidth={3} />,
     },
     {
-      title: "TimeStamp",
+      title: "Date and Time",
       icon: <Clock size={16} color="#22c55e" strokeWidth={3} />,
     },
     {
-      title: "Alert Temp (°C)",
+      title: "Min. Temp (°C)",
       icon: <Bell size={16} color="#dc2626" strokeWidth={3} />,
     },
   ];
