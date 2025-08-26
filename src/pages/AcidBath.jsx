@@ -411,38 +411,24 @@ export default function AcidBath() {
           </tbody>
         </table>
       </div>
-
-      <div className="mt-6 flex flex-wrap justify-center gap-4">
-        <button
-          onClick={() => setShowModal(true)}
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-md shadow-md transition"
-          aria-label="Manage Phone Numbers"
-        >
-          <Phone size={20} />
-          Manage Phone Numbers
-        </button>
-
-        {/* <button
-          onClick={() => setShowAlertModal(true)}
-          className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-5 py-2 rounded-md shadow-md transition"
-          aria-label="Add Alert Temperature"
-        >
-          <AlertCircle size={20} />
-          Add Alert Temperature
-        </button> */}
-        <div className="flex items-center gap-2">
-          {/* <input
-            type="date"
-            value={csvDate}
-            onChange={(e) => setCsvDate(e.target.value)}
-            className="border border-gray-300 p-2 rounded-md"
-          /> */}
+      <div className="mt-6 space-y-3">
+        <div className="flex justify-center">
+          <button
+            onClick={() => setShowModal(true)}
+            className="w-full max-w-sm sm:max-w-md bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-md shadow-md transition inline-flex items-center justify-center gap-2"
+            aria-label="Manage Phone Numbers"
+          >
+            <Phone size={20} />
+            Manage Phone Numbers
+          </button>
+        </div>
+        <div className="flex justify-center">
           <DatePicker
             selected={
               csvDate
                 ? (() => {
                     const [day, month, year] = csvDate.split("/").map(Number);
-                    return new Date(year, month - 1, day); // Parse dd/MM/yyyy correctly
+                    return new Date(year, month - 1, day); 
                   })()
                 : null
             }
@@ -451,22 +437,27 @@ export default function AcidBath() {
               const day = String(date.getDate()).padStart(2, "0");
               const month = String(date.getMonth() + 1).padStart(2, "0");
               const year = date.getFullYear();
-              setCsvDate(`${day}/${month}/${year}`); // ✅ store in dd/MM/yyyy
+              setCsvDate(`${day}/${month}/${year}`); 
             }}
             dateFormat="dd/MM/yyyy"
             placeholderText="dd/MM/yyyy"
-            className="border border-gray-300 p-2 rounded-md hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 w-36 sm:w-40"
+            className="w-full max-w-sm sm:max-w-md bg-gray-100 text-gray-800 font-medium px-4 py-2 rounded-md shadow-md border border-gray-300 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer text-center"
           />
+        </div>
 
+        <div className="flex justify-center">
           <button
             onClick={downloadPDFForDate}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md"
+            className="w-full max-w-sm sm:max-w-md bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded-md shadow transition"
           >
             Download PDF
           </button>
+        </div>
+
+        <div className="flex justify-center">
           <button
             onClick={showData}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition"
+            className="w-full max-w-sm sm:max-w-md bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md shadow transition"
           >
             Show Data
           </button>
