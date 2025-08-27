@@ -428,7 +428,7 @@ export default function AcidBath() {
               csvDate
                 ? (() => {
                     const [day, month, year] = csvDate.split("/").map(Number);
-                    return new Date(year, month - 1, day); 
+                    return new Date(year, month - 1, day);
                   })()
                 : null
             }
@@ -437,7 +437,7 @@ export default function AcidBath() {
               const day = String(date.getDate()).padStart(2, "0");
               const month = String(date.getMonth() + 1).padStart(2, "0");
               const year = date.getFullYear();
-              setCsvDate(`${day}/${month}/${year}`); 
+              setCsvDate(`${day}/${month}/${year}`);
             }}
             dateFormat="dd/MM/yyyy"
             placeholderText="dd/MM/yyyy"
@@ -631,7 +631,7 @@ export default function AcidBath() {
           <h3 className="text-2xl font-bold mb-4 text-slate-700 text-center">
             Data for {csvDate}
           </h3>
-          <table className="min-w-full divide-y divide-gray-200 text-center">
+          <table className="hidden sm:table min-w-full divide-y divide-gray-200 text-center">
             <thead className="bg-gray-100">
               <tr className="border-b border-gray-400">
                 <th className="px-4 py-3 text-sm font-semibold text-gray-900">
@@ -640,10 +640,10 @@ export default function AcidBath() {
                 <th className="px-4 py-3 text-sm font-semibold text-gray-900">
                   Temp (°C)
                 </th>
-                <th className="hidden sm:table-cell px-4 py-3 text-sm font-semibold text-gray-900">
+                <th className="px-4 py-3 text-sm font-semibold text-gray-900">
                   Time
                 </th>
-                <th className="hidden sm:table-cell px-4 py-3 text-sm font-semibold text-gray-900">
+                <th className="px-4 py-3 text-sm font-semibold text-gray-900">
                   Temp (°C)
                 </th>
               </tr>
@@ -665,12 +665,8 @@ export default function AcidBath() {
                     >
                       <td className="px-4 py-3">{time1}</td>
                       <td className="px-4 py-3">{r1?.temp_val ?? "—"}</td>
-                      <td className="hidden sm:table-cell px-4 py-3">
-                        {time2}
-                      </td>
-                      <td className="hidden sm:table-cell px-4 py-3">
-                        {r2?.temp_val ?? "—"}
-                      </td>
+                      <td className="px-4 py-3">{time2}</td>
+                      <td className="px-4 py-3">{r2?.temp_val ?? "—"}</td>
                     </tr>
                   );
                 }
@@ -678,6 +674,24 @@ export default function AcidBath() {
               })()}
             </tbody>
           </table>
+          <div className="sm:hidden space-y-2">
+            {dailyRows.map((row, idx) => {
+              const time = row?.timestamp.split(",")[1]?.trim() || "—";
+              return (
+                <div
+                  key={idx}
+                  className={`flex justify-between px-4 py-3 rounded-md ${
+                    idx % 2 === 0 ? "bg-white" : "bg-blue-50"
+                  }`}
+                >
+                  <span className="font-medium text-gray-700">{time}</span>
+                  <span className="text-gray-900">
+                    {row?.temp_val ?? "—"} °C
+                  </span>
+                </div>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>
