@@ -34,8 +34,7 @@ export default function AcidBath() {
 
   const [dailyRows, setDailyRows] = useState([]);
 
-  const EDGE_FUNCTION_URL =
-    "https://czxnvqwbwszzfgecpkbi.supabase.co/functions/v1/DSgroup";
+  const EDGE_FUNCTION_URL = import.meta.env.VITE_SUPABASE_DS_GROUP;
 
   const fetchData = async () => {
     const { data: tempData } = await supabase
