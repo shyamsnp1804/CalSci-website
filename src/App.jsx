@@ -13,7 +13,7 @@ import AddDevice from "./device/AddDevice";
 import NotFound from "./pages/NotFound";
 import DisplayPage from "./pages/DisplayPages";
 import AcidBath from "./pages/AcidBath";
-import AppStore from "./pages/AppStore";
+// import AppStore from "./pages/AppStore";
 
 const SPECIAL_EMAILS = ["contact@calsci.io"];
 
@@ -52,7 +52,7 @@ function App() {
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/display" element={<DisplayPage />} />
             {/* <Route path="/acidbath" element={<AcidBath />} /> */}
-            <Route path="/appstore" element={<AppStore />} />
+            {/* <Route path="/appstore" element={<AppStore />} /> */}
 
             {/* Protected Routes */}
             <Route

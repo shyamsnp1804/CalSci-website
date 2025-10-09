@@ -91,7 +91,7 @@ function Navbar() {
             Articles
           </a>
 
-          <Link
+          {/* <Link
             to="/appstore"
             className={`text-base font-medium px-4 py-2 rounded transition ${
               location.pathname === "/appstore"
@@ -100,7 +100,7 @@ function Navbar() {
             }`}
           >
             AppStore
-          </Link>
+          </Link> */}
           <Link
             to="/codeEditor"
             className={`text-base font-medium px-4 py-2 rounded transition ${
@@ -183,7 +183,7 @@ function Navbar() {
               Articles
             </a>
 
-            <Link
+            {/* <Link
               to="/appstore"
               className={`text-base font-medium px-4 py-2 rounded ${
                 location.pathname === "/appstore"
@@ -192,7 +192,7 @@ function Navbar() {
               }`}
             >
               AppStore
-            </Link>
+            </Link> */}
             <Link
               to="/codeEditor"
               className={`text-base font-medium px-4 py-2 rounded ${

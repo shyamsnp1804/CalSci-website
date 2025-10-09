@@ -50,7 +50,7 @@ const Footer = () => {
                   />
                 </svg>
               </SocialIcon>
-              <SocialIcon href="#">
+              <SocialIcon href="https://www.linkedin.com/company/calsci-io/">
                 <svg
                   className="w-6 h-6"
                   fill="currentColor"
@@ -61,7 +61,6 @@ const Footer = () => {
               </SocialIcon>
             </div>
           </div>
-
           <div>
             <h3 className="text-sm font-semibold tracking-wider uppercase text-gray-300">
               Our Address
@@ -76,6 +75,12 @@ const Footer = () => {
                 <br />
                 GURUGRAM, 122002
               </p>
+              <a
+                href="tel:+918527896692"
+                className="block hover:text-white transition-colors"
+              >
+                +91-8527896692
+              </a>
               <a
                 href="mailto:contact@calsci.io"
                 className="block hover:text-white transition-colors"

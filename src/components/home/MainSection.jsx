@@ -6,14 +6,16 @@ const MainSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center text-white">
       <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.pexels.com/photos/4475523/pexels-photo-4475523.jpeg"
-          alt="Industrial Automation Background"
-          className="w-full h-full object-cover filter blur-sm"
+        <video
+          src="/video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-50"></div>
+        <div className="absolute inset-0 bg-black opacity-40"></div>
       </div>
-
       <div className="relative z-10 container mx-auto px-6 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
