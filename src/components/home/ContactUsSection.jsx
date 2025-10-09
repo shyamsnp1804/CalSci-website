@@ -1,33 +1,33 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, User, MessageSquare } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 const BackgroundBubbles = () => {
   return (
     <>
       <style>{`
-                @keyframes float1 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
-                @keyframes float2 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(-5deg); } }
-            `}</style>
+        @keyframes float1 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
+        @keyframes float2 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(-5deg); } }
+      `}</style>
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <div
-          className="absolute bg-gradient-to-br from-blue-500 to-indigo-200 rounded-full filter blur-3xl opacity-30"
+          className="absolute bg-gradient-to-br from-blue-800 to-indigo-500 rounded-full filter blur-3xl opacity-30"
           style={{
             width: "450px",
             height: "450px",
             top: "5%",
             left: "10%",
-            animation: "float1 20s ease-in-out infinite",
+            animation: "float1 5s ease-in-out infinite",
           }}
         ></div>
         <div
-          className="absolute bg-gradient-to-br from-purple-500 to-pink-200 rounded-full filter blur-3xl opacity-30"
+          className="absolute bg-gradient-to-br from-purple-800 to-pink-500 rounded-full filter blur-3xl opacity-30"
           style={{
             width: "400px",
             height: "400px",
             bottom: "5%",
             right: "10%",
-            animation: "float2 24s ease-in-out infinite alternate",
+            animation: "float2 5s ease-in-out infinite alternate",
           }}
         ></div>
       </div>
@@ -36,11 +36,62 @@ const BackgroundBubbles = () => {
 };
 
 const ContactUsSection = () => {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [result, setResult] = useState(null);
+
+  const WEB3FORMS_ACCESS_KEY = "ac7c8776-a78d-4732-b1a3-3e2994bc4480";
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(
-      "Thank you for your message! This is a demo form. In a real application, your message would be sent to our team."
-    );
+    if (!formData.name || !formData.email || !formData.message) {
+      setResult({
+        success: false,
+        message: "Please fill out all required fields.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setResult(null);
+
+    const formValues = new FormData(e.target);
+    formValues.append("access_key", WEB3FORMS_ACCESS_KEY);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formValues,
+      });
+
+      const json = await response.json();
+
+      if (json.success) {
+        setResult({
+          success: true,
+          message: "Thank you! Your message has been sent successfully.",
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        console.error("Web3Forms Error:", json);
+        setResult({
+          success: false,
+          message: json.message || "An error occurred. Please try again.",
+        });
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      setResult({
+        success: false,
+        message: "A network error occurred. Please try again later.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -65,7 +116,8 @@ const ContactUsSection = () => {
                 <div className="flex items-start space-x-4">
                   <MapPin className="w-6 h-6 text-blue-600 mt-1 shrink-0" />
                   <p className="text-gray-700">
-                   3rd Floor ORCHID CENTER GOLF COURSE ROAD, SEC-53 DLF QE HARYANA GURUGRAM, 122002
+                    3rd Floor ORCHID CENTER GOLF COURSE ROAD, SEC-53 DLF QE
+                    HARYANA GURUGRAM, 122002
                   </p>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -88,7 +140,6 @@ const ContactUsSection = () => {
                 </div>
               </div>
             </div>
-
             <div className="p-8 md:p-12 bg-gray-50/50">
               <h3 className="text-2xl font-semibold text-gray-900 mb-6">
                 Send Us a Message
@@ -103,6 +154,10 @@ const ContactUsSection = () => {
                     name="name"
                     id="name"
                     required
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
                     className="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 placeholder-gray-500"
                     placeholder="Your Name"
                   />
@@ -116,6 +171,10 @@ const ContactUsSection = () => {
                     name="email"
                     id="email"
                     required
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
                     className="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 placeholder-gray-500"
                     placeholder="Your Email"
                   />
@@ -129,6 +188,10 @@ const ContactUsSection = () => {
                     id="message"
                     required
                     rows="4"
+                    value={formData.message}
+                    onChange={(e) =>
+                      setFormData({ ...formData, message: e.target.value })
+                    }
                     className="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 placeholder-gray-500"
                     placeholder="Your Message"
                   ></textarea>
@@ -136,13 +199,30 @@ const ContactUsSection = () => {
                 <div>
                   <motion.button
                     type="submit"
-                    className="w-full py-3 px-4 font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
+                    disabled={isSubmitting}
+                    className={`w-full py-3 px-4 font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${
+                      isSubmitting ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    Send Message
+                    {isSubmitting ? "Sending..." : "Send Message"}
                   </motion.button>
                 </div>
+                <AnimatePresence>
+                  {result && (
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className={`text-sm font-medium text-center ${
+                        result.success ? "text-green-600" : "text-red-600"
+                      }`}
+                    >
+                      {result.message}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
               </form>
             </div>
           </div>
