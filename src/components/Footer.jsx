@@ -64,13 +64,17 @@ const Footer = () => {
 
           <div>
             <h3 className="text-sm font-semibold tracking-wider uppercase text-gray-300">
-              Contact Us
+              Our Address
             </h3>
             <div className="mt-4 space-y-3 text-gray-400">
               <p>
-                Zone-1, Industrial Growth Centre
+                3rd Floor ORCHID CENTER
                 <br />
-                Bodhjungnagar, Agartala, Tripura (W), 799008
+                GOLF COURSE ROAD, SEC-53
+                <br />
+                DLF QE HARYANA
+                <br />
+                GURUGRAM, 122002
               </p>
               <a
                 href="mailto:contact@calsci.io"

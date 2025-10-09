@@ -7,6 +7,7 @@ import FeaturesSection from "../components/home/FeaturesSection";
 import SocialProofSection from "../components/home/SocialProofSection";
 import Footer from "../components/Footer";
 import ContactUsSection from "../components/home/ContactUsSection";
+import ArchiveSection from "../components/home/ArchiveSection";
 
 function HomePage() {
   const sectionVariants = {
@@ -48,6 +49,15 @@ function HomePage() {
         variants={sectionVariants}
       >
         <SocialProofSection />
+      </motion.section>
+
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        variants={sectionVariants}
+      >
+        <ArchiveSection />
       </motion.section>
 
       <motion.section

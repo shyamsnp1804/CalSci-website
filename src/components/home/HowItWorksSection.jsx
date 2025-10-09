@@ -127,21 +127,21 @@ const HowItWorksSection = () => {
       subtitle: "CalSci Slave",
       description:
         "Easily connect our versatile Slave devices to any sensor on your machinery. They process readings into meaningful data and transmit them wirelessly.",
-      image: "https://placehold.co/800x600/1F2937/9CA3AF?text=Slave+Device",
+      image: "../../../public/image2.jpeg",
     },
     {
       title: "2. Aggregate & Process",
       subtitle: "CalSci Master",
       description:
         "The Master device is the powerful heart of the system, collecting data from up to 10 Slaves and performing strong edge computing for faster processing.",
-      image: "https://placehold.co/800x600/1F2937/9CA3AF?text=Master+Device",
+      image: "../../../public/image1.jpeg",
     },
     {
       title: "3. Monitor & Control",
       subtitle: "CalSci Console",
       description:
         "View all your data in real-time from any browser on our cloud platform. Set parameters, receive alerts, and install new apps from our AppStore.",
-      image: "https://placehold.co/800x600/1F2937/9CA3AF?text=Console+UI",
+      image: "../../../public/image8.jpeg",
     },
   ];
 

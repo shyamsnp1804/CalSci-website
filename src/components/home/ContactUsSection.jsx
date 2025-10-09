@@ -65,8 +65,7 @@ const ContactUsSection = () => {
                 <div className="flex items-start space-x-4">
                   <MapPin className="w-6 h-6 text-blue-600 mt-1 shrink-0" />
                   <p className="text-gray-700">
-                    Zone-1, Industrial Growth Centre, Bodhjungnagar, Agartala,
-                    Tripura (W), 799008
+                   3rd Floor ORCHID CENTER GOLF COURSE ROAD, SEC-53 DLF QE HARYANA GURUGRAM, 122002
                   </p>
                 </div>
                 <div className="flex items-center space-x-4">
