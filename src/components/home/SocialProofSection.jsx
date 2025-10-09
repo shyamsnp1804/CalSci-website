@@ -71,7 +71,7 @@ const SocialProofSection = () => {
 
           <div className="w-full h-64 md:h-full rounded-xl overflow-hidden shadow-lg">
             <img
-              src="../../../public/image5.jpeg"
+              src="/image5.jpeg"
               alt="Demonstration at Dharampal Satyapal Limited"
               className="w-full h-full object-cover"
             />
