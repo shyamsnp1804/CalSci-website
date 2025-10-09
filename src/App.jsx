@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { AuthContext, AuthProvider } from "./context/AuthContext";
 
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import CodeEditor from "./pages/CodeEditor";
@@ -13,8 +13,6 @@ import AddDevice from "./device/AddDevice";
 import NotFound from "./pages/NotFound";
 import DisplayPage from "./pages/DisplayPages";
 import AcidBath from "./pages/AcidBath";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
 import AppStore from "./pages/AppStore";
 
 const SPECIAL_EMAILS = ["contact@calsci.io"];
@@ -48,14 +46,12 @@ function App() {
         <AnimatePresence mode="wait">
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/codeEditor" element={<CodeEditor />} />
             <Route path="/display" element={<DisplayPage />} />
             {/* <Route path="/acidbath" element={<AcidBath />} /> */}
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
             <Route path="/appstore" element={<AppStore />} />
 
             {/* Protected Routes */}
