@@ -123,25 +123,28 @@ const HowItWorksSection = () => {
 
   const steps = [
     {
+      type: "image",
       title: "1. Deploy & Collect",
       subtitle: "CalSci Slave",
       description:
         "Easily connect our versatile Slave devices to any sensor on your machinery. They process readings into meaningful data and transmit them wirelessly.",
-      image: "/image2.jpeg",
+      mediaSrc: "/image2.jpeg",
     },
     {
+      type: "image",
       title: "2. Aggregate & Process",
       subtitle: "CalSci Master",
       description:
         "The Master device is the powerful heart of the system, collecting data from up to 10 Slaves and performing strong edge computing for faster processing.",
-      image: "/image1.jpeg",
+      mediaSrc: "/image1.jpeg",
     },
     {
+      type: "video",
       title: "3. Monitor & Control",
       subtitle: "CalSci Console",
       description:
         "View all your data in real-time from any browser on our cloud platform. Set parameters, receive alerts, and install new apps from our AppStore.",
-      image: "/image8.jpeg",
+      mediaSrc: "/console-video.mp4",
     },
   ];
 
@@ -210,11 +213,23 @@ const HowItWorksSection = () => {
                   </p>
                 </div>
                 <div className="md:order-2">
-                  <img
-                    src={steps[activeStep].image}
-                    alt={steps[activeStep].title}
-                    className="rounded-xl w-full object-cover shadow-lg"
-                  />
+                  {steps[activeStep].type === "video" ? (
+                    <video
+                      key={steps[activeStep].mediaSrc}
+                      src={steps[activeStep].mediaSrc}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="rounded-xl w-full h-full max-h-[350px] object-cover shadow-lg"
+                    />
+                  ) : (
+                    <img
+                      src={steps[activeStep].mediaSrc}
+                      alt={steps[activeStep].title}
+                      className="rounded-xl w-full h-full max-h-[350px] object-cover shadow-lg"
+                    />
+                  )}
                 </div>
               </motion.div>
             </AnimatePresence>
