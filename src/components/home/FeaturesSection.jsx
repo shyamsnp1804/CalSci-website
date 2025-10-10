@@ -1,24 +1,21 @@
 import React from "react";
+import { motion } from "framer-motion";
+import {
+  BarChart2,
+  Smartphone,
+  Shield,
+  PlugZap,
+  TerminalSquare,
+  LineChart,
+} from "lucide-react";
 
 const BackgroundBubbles = () => {
   return (
     <>
-      <style>
-        {`
-                    @keyframes float1 {
-                        0% { transform: translateY(0) translateX(0) scale(1) rotate(0deg); }
-                        25% { transform: translateY(-20px) translateX(30px) scale(1.05) rotate(5deg); }
-                        50% { transform: translateY(-10px) translateX(-20px) scale(1) rotate(-5deg); }
-                        75% { transform: translateY(20px) translateX(10px) scale(0.95) rotate(10deg); }
-                        100% { transform: translateY(0) translateX(0) scale(1) rotate(0deg); }
-                    }
-                    @keyframes float2 {
-                        0% { transform: translateY(0) translateX(0) scale(1.1) rotate(0deg); }
-                        50% { transform: translateY(40px) translateX(-40px) scale(1) rotate(-15deg); }
-                        100% { transform: translateY(0) translateX(0) scale(1.1) rotate(0deg); }
-                    }
-                `}
-      </style>
+      <style>{`
+                @keyframes float1 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
+                @keyframes float2 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(-5deg); } }
+            `}</style>
       <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
         <div
           className="absolute bg-gradient-to-br from-red-800 to-orange-500 rounded-full filter blur-3xl opacity-20"
@@ -48,7 +45,7 @@ const BackgroundBubbles = () => {
             height: "450px",
             top: "20%",
             right: "10%",
-            animation: "float2 5s ease-in-out infinite",
+            animation: "float1 5s ease-in-out infinite",
             animationDelay: "1s",
           }}
         ></div>
@@ -57,113 +54,74 @@ const BackgroundBubbles = () => {
   );
 };
 
-const CpuChipIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-7 w-7"
-  >
-    <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-    <rect x="9" y="9" width="6" height="6"></rect>
-    <line x1="9" y1="1" x2="9" y2="4"></line>
-    <line x1="15" y1="1" x2="15" y2="4"></line>
-    <line x1="9" y1="20" x2="9" y2="23"></line>
-    <line x1="15" y1="20" x2="15" y2="23"></line>
-    <line x1="20" y1="9" x2="23" y2="9"></line>
-    <line x1="20" y1="14" x2="23" y2="14"></line>
-    <line x1="1" y1="9" x2="4" y2="9"></line>
-    <line x1="1" y1="14" x2="4" y2="14"></line>
-  </svg>
-);
-const ZapIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-7 w-7"
-  >
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-  </svg>
-);
-const CloudIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-7 w-7"
-  >
-    <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-  </svg>
-);
-const CodeIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className="h-7 w-7"
-  >
-    <polyline points="16 18 22 12 16 6"></polyline>
-    <polyline points="8 6 2 12 8 18"></polyline>
-  </svg>
-);
+const iconComponents = {
+  BarChart2: () => <BarChart2 className="h-7 w-7" />,
+  Smartphone: () => <Smartphone className="h-7 w-7" />,
+  Shield: () => <Shield className="h-7 w-7" />,
+  PlugZap: () => <PlugZap className="h-7 w-7" />,
+  TerminalSquare: () => <TerminalSquare className="h-7 w-7" />,
+  LineChart: () => <LineChart className="h-7 w-7" />,
+};
 
 const FeaturesSection = () => {
   const features = [
     {
-      icon: <ZapIcon />,
-      title: "Real-Time Updates",
+      icon: "BarChart2",
+      title: "Real-Time Monitoring",
       description:
-        "Our console updates instantly, so you can operate without any delays in monitoring or control.",
+        "Track machinery performance instantly from our web dashboard or directly on the CalSci Master device.",
+      imageSrc: "/image14.png",
     },
     {
-      icon: <CpuChipIcon />,
-      title: "Powerful Edge Computing",
+      icon: "Smartphone",
+      title: "Instant Mobile Alerts",
       description:
-        "Processes happen faster with strong computations performed directly on the CalSci Master.",
+        "Receive immediate notifications on your phone the moment a machine's parameters hit a critical threshold.",
+      imageSrc: "/image5.jpeg",
     },
     {
-      icon: <CloudIcon />,
-      title: "Cloud AppStore",
+      icon: "Shield",
+      title: "Secure Access Control",
       description:
-        "Install new apps for different sensors from the CalSci Console, just like on your phone.",
+        "Manage your team with a secure, role-based console. Assign admin or employee permissions to control who sees what.",
+      imageSrc: "/image15.png",
     },
     {
-      icon: <CodeIcon />,
-      title: "Low-Code Environment",
+      icon: "PlugZap",
+      title: "Plug & Play Setup",
       description:
-        "Build new applications for your sensors with less code, directly on the CalSci Console.",
+        "Get started in minutes. Simply attach a CalSci Slave to your sensor, and it instantly connects to the Master device.",
+      imageSrc: "/image2.jpeg",
+    },
+    {
+      icon: "TerminalSquare",
+      title: "On-Floor Master Device",
+      description:
+        "View all real-time data and settings directly on the factory floor with the CalSci Master, no computer needed.",
+      imageSrc: "/image1.jpeg",
+    },
+    {
+      icon: "LineChart",
+      title: "One-Click Data Analysis",
+      description:
+        "Export comprehensive records with a single click to analyze machine performance and predict future needs.",
+      imageSrc: "/image4.jpeg",
     },
   ];
 
-  return (
-    <div className="relative bg-gray-50 overflow-hidden py-5 sm:py-5">
-      <BackgroundBubbles />
+  const cardVariants = {
+    initial: { scale: 1, boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.1)" },
+    hover: { scale: 1.05, boxShadow: "0px 20px 40px rgba(0, 0, 0, 0.2)" },
+  };
 
+  const imageVariants = {
+    initial: { scale: 1.1 },
+    hover: { scale: 1.2, transition: { duration: 0.5 } },
+  };
+
+  return (
+    <div className="relative bg-gray-50 overflow-hidden py-7 sm:py-7">
+      <BackgroundBubbles />
       <div className="relative z-10 container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
@@ -174,21 +132,59 @@ const FeaturesSection = () => {
             intuitive.
           </p>
         </div>
-        <div className="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-start p-6 bg-white/60 backdrop-blur-md rounded-2xl shadow-lg border border-white/30"
-            >
-              <div className="mb-4 bg-blue-600/10 text-blue-600 p-3 rounded-xl">
-                {feature.icon}
-              </div>
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-700">{feature.description}</p>
-            </div>
-          ))}
+        <div
+          className="mt-7 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
+          style={{ perspective: "1200px" }}
+        >
+          {features.map((feature, index) => {
+            const Icon = iconComponents[feature.icon];
+            return (
+              <motion.div
+                key={index}
+                className="relative h-80 cursor-pointer"
+                initial="initial"
+                whileHover="hover"
+                variants={cardVariants}
+                transition={{ duration: 0.4, ease: "easeInOut" }}
+              >
+                <motion.div
+                  className="absolute w-full h-full"
+                  style={{ transformStyle: "preserve-3d" }}
+                  variants={{ hover: { transform: "rotateY(180deg)" } }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                >
+                  <div
+                    className="absolute w-full h-full p-6 flex flex-col items-start bg-white/70 backdrop-blur-lg rounded-2xl border border-white/30"
+                    style={{ backfaceVisibility: "hidden" }}
+                  >
+                    <div className="mb-4 bg-blue-600/10 text-blue-600 p-3 rounded-xl">
+                      <Icon />
+                    </div>
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-800 text-m">
+                      {feature.description}
+                    </p>
+                  </div>
+                  <div
+                    className="absolute w-full h-full rounded-2xl overflow-hidden"
+                    style={{
+                      backfaceVisibility: "hidden",
+                      transform: "rotateY(180deg)",
+                    }}
+                  >
+                    <motion.img
+                      src={feature.imageSrc}
+                      alt={feature.title}
+                      className="w-full h-full object-cover"
+                      variants={imageVariants}
+                    />
+                  </div>
+                </motion.div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>
