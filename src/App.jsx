@@ -41,7 +41,7 @@ function App() {
   // Normal app for all other users
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
+      {/* <Navbar /> */}
       <main className="flex-grow">
         <AnimatePresence mode="wait">
           <Routes>
