@@ -29,7 +29,7 @@ function App() {
     );
   }
   // If the user is the special email, ONLY show AcidBath
-  if (isAuthenticated && user?.email === SPECIAL_EMAIL) {
+  if (isAuthenticated && user?.email === SPECIAL_EMAILS) {
     return (
       <Routes>
         <Route path="/acidbath" element={<AcidBath />} />
