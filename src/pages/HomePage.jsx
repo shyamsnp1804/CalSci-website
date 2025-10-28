@@ -1,5 +1,6 @@
 import MainSection from "../components/home/MainSection";
 import FeaturesSection from "../components/home/FeaturesSection";
+import HowItMade from "../components/home/HowItmade";
 
 function HomePage() {
   return (
@@ -7,6 +8,8 @@ function HomePage() {
       <MainSection />
 
       <FeaturesSection />
+
+      <HowItMade />
     </div>
   );
 }
