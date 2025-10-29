@@ -45,7 +45,7 @@ const MainSection = () => {
             <img
               src={calsciDevice}
               alt="CalSci Device"
-              className="w-[220px] sm:w-[290px] md:w-[330px] lg:w-[360px] drop-shadow-lg"
+              className="w-[220px] sm:w-[290px] md:w-[330px] lg:w-[400px] drop-shadow-lg"
             />
           </div>
         </div>
