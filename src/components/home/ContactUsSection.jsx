@@ -1,39 +1,39 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { useState } from "react";
+import DisplayLayout from "../DisplayLayout";
+import { Mail, Linkedin } from "lucide-react";
 
-const BackgroundBubbles = () => {
-  return (
-    <>
-      <style>{`
-        @keyframes float1 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-25px) rotate(5deg); } }
-        @keyframes float2 { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(-5deg); } }
-      `}</style>
-      <div className="absolute inset-0 z-0 w-full h-full overflow-hidden">
-        <div
-          className="absolute bg-gradient-to-br from-blue-800 to-indigo-500 rounded-full filter blur-3xl opacity-30"
-          style={{
-            width: "450px",
-            height: "450px",
-            top: "5%",
-            left: "10%",
-            animation: "float1 5s ease-in-out infinite",
-          }}
-        ></div>
-        <div
-          className="absolute bg-gradient-to-br from-purple-800 to-pink-500 rounded-full filter blur-3xl opacity-30"
-          style={{
-            width: "400px",
-            height: "400px",
-            bottom: "5%",
-            right: "10%",
-            animation: "float2 5s ease-in-out infinite alternate",
-          }}
-        ></div>
-      </div>
-    </>
-  );
-};
+const teamMembers = [
+  {
+    name: "Member 1",
+    image: "/images/member1.jpg",
+    email: "member1@example.com",
+    linkedin: "https://linkedin.com/in/member1",
+  },
+  {
+    name: "Member 2",
+    image: "/images/member2.jpg",
+    email: "member2@example.com",
+    linkedin: "https://linkedin.com/in/member2",
+  },
+  {
+    name: "Member 3",
+    image: "/images/member3.jpg",
+    email: "member3@example.com",
+    linkedin: "https://linkedin.com/in/member3",
+  },
+  {
+    name: "Member 4",
+    image: "/images/member4.jpg",
+    email: "member4@example.com",
+    linkedin: "https://linkedin.com/in/member4",
+  },
+  {
+    name: "Member 5",
+    image: "/images/member5.jpg",
+    email: "member5@example.com",
+    linkedin: "https://linkedin.com/in/member5",
+  },
+];
 
 const ContactUsSection = () => {
   const [formData, setFormData] = useState({
@@ -41,194 +41,152 @@ const ContactUsSection = () => {
     email: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [result, setResult] = useState(null);
-
+  const [status, setStatus] = useState(null);
+  const [loading, setLoading] = useState(false);
   const WEB3FORMS_ACCESS_KEY = "ac7c8776-a78d-4732-b1a3-3e2994bc4480";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      setResult({
-        success: false,
-        message: "Please fill out all required fields.",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    setResult(null);
-
-    const formValues = new FormData(e.target);
-    formValues.append("access_key", WEB3FORMS_ACCESS_KEY);
+    setLoading(true);
+    const form = new FormData(e.target);
+    form.append("access_key", WEB3FORMS_ACCESS_KEY);
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formValues,
+        body: form,
       });
-
-      const json = await response.json();
-
-      if (json.success) {
-        setResult({
-          success: true,
-          message: "Thank you! Your message has been sent successfully.",
-        });
+      const data = await res.json();
+      if (data.success) {
+        setStatus({ ok: true, msg: "Message sent successfully!" });
         setFormData({ name: "", email: "", message: "" });
-      } else {
-        console.error("Web3Forms Error:", json);
-        setResult({
-          success: false,
-          message: json.message || "An error occurred. Please try again.",
-        });
-      }
-    } catch (error) {
-      console.error("Submission Error:", error);
-      setResult({
-        success: false,
-        message: "A network error occurred. Please try again later.",
-      });
+      } else setStatus({ ok: false, msg: "Something went wrong. Try again." });
+    } catch {
+      setStatus({ ok: false, msg: "Network error. Please try again later." });
     } finally {
-      setIsSubmitting(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="relative bg-gray-50 overflow-hidden py-16 sm:py-24">
-      <BackgroundBubbles />
-      <div className="relative z-10 container mx-auto px-6">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
-            Get in Touch
-          </h1>
-          <p className="mt-3 text-lg text-gray-600">
-            We’d love to hear from you. Please fill out the form below.
-          </p>
-        </div>
-        <div className="max-w-4xl mx-auto bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl border border-white/30 overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-            <div className="p-8 md:p-12">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-6">
-                Contact Information
+    <DisplayLayout>
+      <section className="relative w-full min-h-fit flex flex-col md:flex-row items-center justify-center px-6 py-16 gap-1">
+        <div className="relative w-full md:w-[50%] flex flex-col items-center justify-center">
+          <div className="relative w-80 h-80 sm:w-96 sm:h-96 flex items-center justify-center">
+            <div className="absolute w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[#f8fdf7] border-4 border-[#52b788] flex items-center justify-center z-10 shadow-md">
+              <h2 className="text-xl sm:text-2xl font-mono font-bold text-[#1b4332]">
+                CalSci
               </h2>
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <MapPin className="w-6 h-6 text-blue-600 mt-1 shrink-0" />
-                  <p className="text-gray-700">
-                    3rd Floor ORCHID CENTER GOLF COURSE ROAD, SEC-53 DLF QE
-                    HARYANA GURUGRAM, 122002
-                  </p>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Mail className="w-6 h-6 text-blue-600 shrink-0" />
-                  <a
-                    href="mailto:contact@calsci.io"
-                    className="text-gray-700 hover:text-blue-600 transition-colors"
-                  >
-                    contact@calsci.io
-                  </a>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Phone className="w-6 h-6 text-blue-600 shrink-0" />
-                  <a
-                    href="tel:+918527896692"
-                    className="text-gray-700 hover:text-blue-600 transition-colors"
-                  >
-                    +91-8527896692
-                  </a>
-                </div>
-              </div>
             </div>
-            <div className="p-8 md:p-12 bg-gray-50/50">
-              <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-                Send Us a Message
-              </h3>
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label htmlFor="name" className="sr-only">
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    id="name"
-                    required
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    className="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 placeholder-gray-500"
-                    placeholder="Your Name"
+            {teamMembers.map((member, index) => {
+              const angle = (index / teamMembers.length) * 2 * Math.PI;
+              const radius = 150;
+              const x = Math.cos(angle) * radius;
+              const y = Math.sin(angle) * radius;
+
+              return (
+                <div
+                  key={index}
+                  className="absolute flex flex-col items-center text-center"
+                  style={{
+                    transform: `translate(${x}px, ${y}px)`,
+                  }}
+                >
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-[#95d5b2] shadow-md object-cover hover:scale-110 transition-transform duration-300"
                   />
-                </div>
-                <div>
-                  <label htmlFor="email" className="sr-only">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    className="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 placeholder-gray-500"
-                    placeholder="Your Email"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="sr-only">
-                    Message
-                  </label>
-                  <textarea
-                    name="message"
-                    id="message"
-                    required
-                    rows="4"
-                    value={formData.message}
-                    onChange={(e) =>
-                      setFormData({ ...formData, message: e.target.value })
-                    }
-                    className="block w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/80 placeholder-gray-500"
-                    placeholder="Your Message"
-                  ></textarea>
-                </div>
-                <div>
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`w-full py-3 px-4 font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all ${
-                      isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {isSubmitting ? "Sending..." : "Send Message"}
-                  </motion.button>
-                </div>
-                <AnimatePresence>
-                  {result && (
-                    <motion.p
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className={`text-sm font-medium text-center ${
-                        result.success ? "text-green-600" : "text-red-600"
-                      }`}
+                  <h3 className="mt-2 text-sm font-semibold text-[#1b4332]">
+                    {member.name}
+                  </h3>
+                  <div className="flex flex-col items-center mt-1 space-y-1">
+                    <a
+                      href={`mailto:${member.email}`}
+                      className="text-xs text-[#2d6a4f] hover:text-[#1b4332] underline"
                     >
-                      {result.message}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </form>
-            </div>
+                      {member.email}
+                    </a>
+                    <a
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#1b4332] hover:text-[#2d6a4f]"
+                    >
+                      <Linkedin className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      </div>
-    </div>
+        <div className="w-full md:w-[45%]">
+          <h1 className="text-4xl sm:text-5xl font-mono font-bold text-[#1b4332] mb-3">
+            Be in Touch
+          </h1>
+          <p className="text-[#2d6a4f] font-mono text-lg mb-8">
+            Ask us anything or share your thoughts — we’d love to hear from you.
+          </p>
+
+          <form onSubmit={handleSubmit} className="space-y-4 font-mono">
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              required
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              className="w-full px-4 py-3 border border-[#95d5b2] rounded-md focus:ring-2 focus:ring-[#52b788] outline-none bg-[#f1faee]"
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              required
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="w-full px-4 py-3 border border-[#95d5b2] rounded-md focus:ring-2 focus:ring-[#52b788] outline-none bg-[#f1faee]"
+            />
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              required
+              rows="4"
+              value={formData.message}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
+              className="w-full px-4 py-3 border border-[#95d5b2] rounded-md focus:ring-2 focus:ring-[#52b788] outline-none bg-[#f1faee]"
+            ></textarea>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 rounded-md font-semibold text-white bg-[#1b4332] hover:bg-[#2d6a4f] transition ${
+                loading ? "opacity-70 cursor-not-allowed" : ""
+              }`}
+            >
+              {loading ? "Sending..." : "Send Message"}
+            </button>
+
+            {status && (
+              <p
+                className={`text-sm mt-2 ${
+                  status.ok ? "text-green-700" : "text-red-600"
+                }`}
+              >
+                {status.msg}
+              </p>
+            )}
+          </form>
+        </div>
+      </section>
+    </DisplayLayout>
   );
 };
 

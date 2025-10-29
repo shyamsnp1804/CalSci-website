@@ -43,7 +43,7 @@ const features = [
 const FeaturesSection = () => {
   return (
     <DisplayLayout>
-      <section className="relative w-full min-h-screen px-6 py-16">
+      <section className="relative w-full px-6 py-12 md:py-12">
         <div className="text-center mb-12 z-10">
           <h2 className="text-4xl sm:text-5xl font-mono font-bold text-[#1b4332]">
             What CalSci Can Do

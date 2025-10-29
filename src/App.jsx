@@ -7,13 +7,17 @@ import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
-import CodeEditor from "./pages/CodeEditor";
 import Device from "./device/Device";
 import AddDevice from "./device/AddDevice";
 import NotFound from "./pages/NotFound";
-import DisplayPage from "./pages/DisplayPages";
 import AcidBath from "./pages/AcidBath";
 // import AppStore from "./pages/AppStore";
+
+import Native from "./pages/software/Native";
+import Extension from "./pages/software/Extension";
+import Simulator from "./pages/software/Simulator";
+import Circuit from "./pages/hardware/Circuit";
+import Mechanical from "./pages/hardware/Mechanical";
 
 const SPECIAL_EMAILS = ["contact@calsci.io"];
 
@@ -49,10 +53,13 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/codeEditor" element={<CodeEditor />} />
-            <Route path="/display" element={<DisplayPage />} />
             {/* <Route path="/acidbath" element={<AcidBath />} /> */}
             {/* <Route path="/appstore" element={<AppStore />} /> */}
+            <Route path="/software/native" element={<Native />} />
+            <Route path="/software/extension" element={<Extension />} />
+            <Route path="/software/simulator" element={<Simulator />} />
+            <Route path="/hardware/circuit" element={<Circuit />} />
+            <Route path="/hardware/mechanical" element={<Mechanical />} />
 
             {/* Protected Routes */}
             <Route
