@@ -15,15 +15,15 @@ const HowItMade = () => {
     <DisplayLayout>
       <div className="min-h-screen w-full flex flex-col items-center text-gray-900">
         <div className="w-full flex flex-col items-center mt-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 ttext-[#1b4332]">
+          <h1 className="text-4xl md:text-5xl font-mono font-bold mb-6 text-[#1b4332]">
             How CalSci is Made
           </h1>
           <img
-            src="public/clasci1.png"
+            src="public/calsci1.png"
             alt="calsci-device"
-            className="w-[320px] md:w-[400px] rounded-xl shadow-lg mb-8"
+            className="w-[320px] md:w-[800px] rounded-xl shadow-lg mb-8"
           />
-          <p className="text-lg max-w-2xl text-center text-gray-600">
+          <p className="text-lg max-w-2xl font-mono font-semibold text-center text-[#1b4332]">
             CalSci is built around the powerful <b>ESP32-S3</b> microcontroller
             and a <b>128×64 monochrome OLED</b> display. It’s a fully
             open-source project combining innovation in hardware and software.
@@ -33,7 +33,7 @@ const HowItMade = () => {
         <div className="h-px bg-gray-300 w-3/4 my-10"></div>
 
         <div className="flex flex-col items-center">
-          <h2 className="text-3xl font-semibold text-[#1b4332] mb-6">
+          <h2 className="text-3xl font-mono font-semibold text-[#1b4332] mb-6">
             Project Structure
           </h2>
 
@@ -41,9 +41,9 @@ const HowItMade = () => {
             <div className="flex flex-col items-center space-y-4">
               <div className="flex items-center space-x-2">
                 <Cpu size={30} className="text-[#1b4332]" />
-                <h3 className="text-2xl font-semibold">Software</h3>
+                <h3 className="text-2xl font-mono font-semibold">Software</h3>
               </div>
-              <p className="text-center text-gray-600 max-w-sm">
+              <p className="text-center font-mono text-[#1b4332] max-w-sm">
                 The software ecosystem is divided into three main components:
               </p>
               <div className="border-l-2 text-[#1b4332] pl-6 space-y-4 mt-2">
@@ -80,9 +80,9 @@ const HowItMade = () => {
             <div className="flex flex-col items-center space-y-4">
               <div className="flex items-center space-x-2">
                 <CircuitBoard size={30} className="text-[#1b4332]" />
-                <h3 className="text-2xl font-semibold">Hardware</h3>
+                <h3 className="text-2xl font-mono font-semibold">Hardware</h3>
               </div>
-              <p className="text-center text-gray-600 max-w-sm">
+              <p className="text-center font-mono text-[#1b4332] max-w-sm">
                 The hardware design focuses on both circuit efficiency and
                 mechanical structure:
               </p>

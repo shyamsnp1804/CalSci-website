@@ -5,7 +5,7 @@ const MainSection = () => {
   return (
     <DisplayLayout>
       <section className="relative w-full min-h-screen flex items-center justify-center px-6 py-16">
-        <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-8 z-10">
+        <div className="container mx-auto flex flex-col md:flex-row items-center justify-center gap-20 z-10">
           <div className="text-left max-w-lg flex flex-col gap-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-mono font-bold leading-snug text-[#1b4332]">
               CalSci
