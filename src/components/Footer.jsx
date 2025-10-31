@@ -1,4 +1,5 @@
 import { Mail, Linkedin, Github } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -7,7 +8,7 @@ const Footer = () => {
         <div>
           <h2 className="text-2xl font-bold text-[#b7e4c7] mb-2">CalSci</h2>
           <p className="text-sm text-[#d8f3dc]/80">
-            India’s open-source scientific programmable calculator.
+            India’s open-source scientific programmable calculator project.
           </p>
         </div>
         <div>
@@ -16,52 +17,52 @@ const Footer = () => {
           </h3>
           <ul className="space-y-2 text-sm">
             <li>
-              <a
-                href="#hardware"
+              <Link
+                to="/docs"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 Documentation
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#docs"
+              <Link
+                to="/software/native"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 Native Software
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#software"
+              <Link
+                to="/software/simulator"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 Simulator
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#extension"
+              <Link
+                to="/software/extension"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 VSCode Extension
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#docs"
+              <Link
+                to="/hardware/circuit"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 Circuit Design
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#docs"
+              <Link
+                to="/hardware/mechanical"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 Body Design
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
@@ -73,7 +74,7 @@ const Footer = () => {
             <li className="flex items-center space-x-2">
               <Github className="w-4 h-4" />
               <a
-                href="https://github.com/yourgithubusername"
+                href="https://github.com/calsci"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-[#95d5b2] transition-colors"
