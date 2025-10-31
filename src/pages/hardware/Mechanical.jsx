@@ -1,9 +1,11 @@
-import React from 'react'
+import DisplayLayout from "../../components/DisplayLayout";
 
 function Mechanical() {
   return (
-    <div>Mechanical</div>
-  )
+    <DisplayLayout>
+      <div className="min-h-screen"></div>
+    </DisplayLayout>
+  );
 }
 
-export default Mechanical
+export default Mechanical;

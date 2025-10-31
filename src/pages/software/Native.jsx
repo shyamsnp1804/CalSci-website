@@ -1,9 +1,11 @@
-import React from 'react'
+import DisplayLayout from "../../components/DisplayLayout";
 
 function Native() {
   return (
-    <div>Native</div>
-  )
+    <DisplayLayout>
+      <div className="min-h-screen"></div>
+    </DisplayLayout>
+  );
 }
 
-export default Native
+export default Native;
