@@ -121,7 +121,7 @@ const ContactUsSection = () => {
             })}
           </div>
         </div>
-        <div className="w-full md:w-[45%]">
+        <div className="w-full md:w-[35%] mr-40">
           <h1 className="text-4xl sm:text-5xl font-mono font-bold text-[#1b4332] mb-3">
             Be in Touch
           </h1>

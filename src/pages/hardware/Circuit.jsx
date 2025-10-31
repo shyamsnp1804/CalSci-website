@@ -1,8 +1,10 @@
-import React from 'react'
+import DisplayLayout from '../../components/DisplayLayout'
 
 function Circuit() {
   return (
-    <div>Circuit</div>
+    <DisplayLayout>
+      <div className="min-h-screen"></div>
+    </DisplayLayout>
   )
 }
 
