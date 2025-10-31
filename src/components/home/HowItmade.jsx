@@ -14,43 +14,46 @@ import calsciImage from "../../../public/calsci1.png";
 const HowItMade = () => {
   return (
     <DisplayLayout>
-      <div className="min-h-screen w-full flex flex-col items-center text-gray-900">
-        <div className="w-full flex flex-col items-center mt-10">
-          <h1 className="text-4xl md:text-5xl font-mono font-bold mb-6 text-[#1b4332]">
+      <div className="w-full flex flex-col items-center text-gray-900 px-4 sm:px-6 py-10 sm:py-14 md:py-16">
+        <div className="w-full flex flex-col items-center text-center mb-10">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-mono font-bold mb-4 text-[#1b4332]">
             How CalSci is Made
           </h1>
+
           <img
             src={calsciImage}
-            alt="calsci-device"
-            className="w-[320px] md:w-[800px] rounded-xl shadow-lg mb-8"
+            alt="CalSci Device"
+            className="w-[240px] sm:w-[380px] md:w-[600px] lg:w-[800px] rounded-xl shadow-lg mb-6 sm:mb-8"
           />
-          <p className="text-lg max-w-2xl font-mono font-semibold text-center text-[#1b4332]">
+
+          <p className="text-base sm:text-lg md:text-xl max-w-3xl font-mono font-semibold text-center text-[#1b4332] leading-relaxed">
             CalSci is built around the powerful <b>ESP32-S3</b> microcontroller
             and a <b>128×64 monochrome OLED</b> display. It’s a fully
             open-source project combining innovation in hardware and software.
           </p>
         </div>
-
-        <div className="h-px bg-gray-300 w-3/4 my-10"></div>
-
-        <div className="flex flex-col items-center">
-          <h2 className="text-3xl font-mono font-semibold text-[#1b4332] mb-6">
+        <div className="h-px bg-[#b7e4c7] w-3/4 mb-10"></div>
+        <div className="flex flex-col items-center text-center">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-mono font-semibold text-[#1b4332] mb-6">
             Project Structure
           </h2>
 
-          <div className="flex flex-col md:flex-row gap-16 items-start md:items-center justify-center">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="flex items-center space-x-2">
-                <Cpu size={30} className="text-[#1b4332]" />
-                <h3 className="text-2xl font-mono font-semibold">Software</h3>
+          <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-start md:items-stretch justify-center w-full max-w-6xl">
+            <div className="flex flex-col items-center space-y-3 sm:space-y-4 flex-1 bg-white/20 backdrop-blur-sm rounded-xl p-6 shadow-sm">
+              <div className="flex items-center space-x-2 mb-2">
+                <Cpu size={28} className="text-[#1b4332]" />
+                <h3 className="text-xl sm:text-2xl font-mono font-semibold text-[#1b4332]">
+                  Software
+                </h3>
               </div>
-              <p className="text-center font-mono text-[#1b4332] max-w-sm">
+              <p className="text-sm sm:text-base text-[#1b4332] max-w-sm leading-relaxed">
                 The software ecosystem is divided into three main components:
               </p>
-              <div className="border-l-2 text-[#1b4332] pl-6 space-y-4 mt-2">
+
+              <div className="border-l-2 border-[#95d5b2] text-[#1b4332] pl-5 space-y-4 mt-2 text-left">
                 <Link
                   to="/software/native"
-                  className="flex items-center space-x-2 hover:text-blue-600 transition"
+                  className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Code size={20} />
                   <span>
@@ -59,7 +62,7 @@ const HowItMade = () => {
                 </Link>
                 <Link
                   to="/software/simulator"
-                  className="flex items-center space-x-2 hover:text-blue-600 transition"
+                  className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Monitor size={20} />
                   <span>
@@ -68,7 +71,7 @@ const HowItMade = () => {
                 </Link>
                 <Link
                   to="/software/extension"
-                  className="flex items-center space-x-2 hover:text-blue-600 transition"
+                  className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Layers size={20} />
                   <span>
@@ -78,19 +81,22 @@ const HowItMade = () => {
                 </Link>
               </div>
             </div>
-            <div className="flex flex-col items-center space-y-4">
-              <div className="flex items-center space-x-2">
-                <CircuitBoard size={30} className="text-[#1b4332]" />
-                <h3 className="text-2xl font-mono font-semibold">Hardware</h3>
+            <div className="flex flex-col items-center space-y-3 sm:space-y-4 flex-1 bg-white/20 backdrop-blur-sm rounded-xl p-6 shadow-sm">
+              <div className="flex items-center space-x-2 mb-2">
+                <CircuitBoard size={28} className="text-[#1b4332]" />
+                <h3 className="text-xl sm:text-2xl font-mono font-semibold text-[#1b4332]">
+                  Hardware
+                </h3>
               </div>
-              <p className="text-center font-mono text-[#1b4332] max-w-sm">
+              <p className="text-sm sm:text-base text-[#1b4332] max-w-sm leading-relaxed">
                 The hardware design focuses on both circuit efficiency and
                 mechanical structure:
               </p>
-              <div className="border-l-2 text-[#1b4332] pl-6 space-y-4 mt-2">
+
+              <div className="border-l-2 border-[#95d5b2] text-[#1b4332] pl-5 space-y-4 mt-2 text-left">
                 <Link
                   to="/hardware/circuit"
-                  className="flex items-center space-x-2 hover:text-blue-600 transition"
+                  className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <GitBranch size={20} />
                   <span>
@@ -99,7 +105,7 @@ const HowItMade = () => {
                 </Link>
                 <Link
                   to="/hardware/mechanical"
-                  className="flex items-center space-x-2 hover:text-blue-600 transition"
+                  className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Hammer size={20} />
                   <span>
