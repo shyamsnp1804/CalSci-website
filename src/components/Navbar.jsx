@@ -12,7 +12,7 @@ const Navbar = () => {
             CalSci
           </Link>
           <Link
-            to="/docs"
+            to="/software/native"
             className="text-lg font-mono font-medium text-[#d8f3dc] hover:text-[#b7e4c7] transition-colors"
           >
             Docs
