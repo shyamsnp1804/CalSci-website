@@ -4,34 +4,38 @@ import { Mail, Linkedin } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Member 1",
+    name: "Shoubhik Saha",
     image: "/images/member1.jpg",
-    email: "mailto:member1@example.com",
-    linkedin: "https://linkedin.com/in/member1",
+    email: "mailto:sobik@calsci.io",
+    linkedin:
+      "https://www.linkedin.com/in/hellosobik?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BswVw6gz%2BSB6c7xd30xtrCw%3D%3D",
   },
   {
-    name: "Member 2",
+    name: "Rupesh Verma",
     image: "/images/member2.jpg",
-    email: "mailto:member2@example.com",
-    linkedin: "https://linkedin.com/in/member2",
+    email: "mailto:rupesh@calsci.io",
+    linkedin:
+      "https://www.linkedin.com/in/rupesh-verma-b950681a0?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BJyTSDLQ0QVy6VJ7NKXKatQ%3D%3D",
   },
   {
-    name: "Member 3",
+    name: "Nagesh Pandey",
     image: "/images/member3.jpg",
-    email: "mailto:member3@example.com",
-    linkedin: "https://linkedin.com/in/member3",
+    email: "mailto:nagesh@calsci.io",
+    linkedin:
+      "https://www.linkedin.com/in/nagesh-pandey-748936366?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BkbNdxbuuScGDo8chxMMWJg%3D%3D",
   },
   {
-    name: "Member 4",
+    name: "Nityanda",
     image: "/images/member4.jpg",
-    email: "mailto:member4@example.com",
-    linkedin: "https://linkedin.com/in/member4",
+    email: "mailto:nitya@calsci.io",
+    linkedin:
+      "https://www.linkedin.com/in/nityananda-haldar-a44969256?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3B2LVLS4hzSoao0%2F%2BJfSd%2FNg%3D%3D",
   },
   {
-    name: "Member 5",
+    name: "Akarsh",
     image: "/images/member5.jpg",
-    email: "mailto:member5@example.com",
-    linkedin: "https://linkedin.com/in/member5",
+    email: "mailto:akarsh@calsci.io",
+    linkedin: "",
   },
 ];
 
