@@ -18,7 +18,7 @@ const Footer = () => {
           <ul className="space-y-2 text-sm">
             <li>
               <Link
-                to="/docs"
+                to="/software/native"
                 className="hover:text-[#95d5b2] transition-colors"
               >
                 Documentation
