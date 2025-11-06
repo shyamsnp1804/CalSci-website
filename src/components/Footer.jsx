@@ -74,7 +74,7 @@ const Footer = () => {
             <li className="flex items-center space-x-2">
               <Github className="w-4 h-4" />
               <a
-                href="https://github.com/calsci"
+                href=""
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-[#95d5b2] transition-colors"
@@ -85,7 +85,7 @@ const Footer = () => {
             <li className="flex items-center space-x-2">
               <Linkedin className="w-4 h-4" />
               <a
-                href="https://linkedin.com/company/calsci"
+                href="https://www.linkedin.com/company/calsci-io/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-[#95d5b2] transition-colors"
