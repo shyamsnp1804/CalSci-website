@@ -10,6 +10,8 @@ import Simulator from "./pages/software/Simulator";
 import Circuit from "./pages/hardware/Circuit";
 import Mechanical from "./pages/hardware/Mechanical";
 
+import CalsciUser from "./pages/CalsciUser";
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -22,6 +24,7 @@ function App() {
           <Route path="/software/simulator" element={<Simulator />} />
           <Route path="/hardware/circuit" element={<Circuit />} />
           <Route path="/hardware/mechanical" element={<Mechanical />} />
+                <Route path="/calsciuser" element={<CalsciUser />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

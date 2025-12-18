@@ -13,10 +13,17 @@ const Navbar = () => {
           </Link>
           <Link
             to="/software/native"
-            className="text-lg font-mono font-medium text-[#d8f3dc] hover:text-[#b7e4c7] transition-colors"
+             className="text-xl font-mono font-bold text-[#b7e4c7] hover:text-[#95d5b2] transition-colors"
           >
             Docs
           </Link>
+              <Link
+            to="/calsciuser"
+             className="text-xl font-mono font-bold text-[#b7e4c7] hover:text-[#95d5b2] transition-colors"
+          >
+            CalsciUser
+          </Link>
+          
         </div>
       </div>
     </nav>
