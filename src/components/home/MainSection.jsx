@@ -12,7 +12,7 @@ const MainSection = () => {
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-mono text-[#2d6a4f] opacity-90">
-              India’s only open-source scientific programmable calculator —
+              India’s first and only open-source scientific programmable calculator —
               fully programmable, internet-connected, and ready for your
               experiments.
             </p>

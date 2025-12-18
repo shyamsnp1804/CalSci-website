@@ -11,6 +11,7 @@ import Circuit from "./pages/hardware/Circuit";
 import Mechanical from "./pages/hardware/Mechanical";
 
 import CalsciUser from "./pages/CalsciUser";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
+      <Footer />
     </div>
   );
 }

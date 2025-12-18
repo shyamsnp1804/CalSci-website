@@ -28,9 +28,9 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center p-4 font-sans">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-blue-50">
-        <div className="flex p-2 bg-blue-50/50 m-6 rounded-2xl">
+    <div className="min-h-screen w-full flex items-center justify-center p-4 font-sans">
+      <div className="w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+        <div className="flex p-2 bg-green-50/50 m-6 rounded-2xl">
           <button
             onClick={() => setIsLogin(true)}
             className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all duration-200 ${
@@ -80,7 +80,7 @@ const AuthForm = () => {
                     <input
                       name="username"
                       type="text"
-                      placeholder="johndoe"
+                      placeholder="username..."
                       className="w-full pl-10 pr-4 py-3 bg-green-50/50 border border-green-100 rounded-xl focus:ring-2 focus:ring-green-500 focus:bg-white outline-none transition-all duration-200"
                       onChange={handleInputChange}
                       required
@@ -142,7 +142,7 @@ const AuthForm = () => {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-green-600 hover:bg-green-700 active:scale-95 text-white rounded-xl font-bold shadow-lg shadow-green-200 transition-all duration-200 flex items-center justify-center gap-2 mt-4"
+                className="w-full py-4 bg-green-800 hover:bg-green-900 active:scale-95 text-white rounded-xl font-bold shadow-lg shadow-green-200 transition-all duration-200 flex items-center justify-center gap-2 mt-4"
               >
                 {isLogin ? "Sign In" : "Create Account"}
                 <ArrowRight size={18} />
