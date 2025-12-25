@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import { Mail, Lock, LogIn, UserPlus, User, ArrowRight } from "lucide-react";
 
+import { useNavigate } from "react-router-dom";
+import { handleLogin, handleSignup } from "./authHandler";
+
 const AuthForm = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -18,13 +24,30 @@ const AuthForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(
-      "Form Submitted:",
-      isLogin ? "Login Mode" : "Signup Mode",
-      formData
-    );
+    setError("");
+    setLoading(true);
+
+    let result;
+    if (isLogin) {
+      result = await handleLogin(formData.email, formData.password);
+    } else {
+      result = await handleSignup(
+        formData.username,
+        formData.email,
+        formData.password
+      );
+    }
+
+    setLoading(false);
+
+    if (!result.success) {
+      setError(result.message);
+      return;
+    }
+
+    if (isLogin) navigate("/dashboard");
   };
 
   return (
@@ -65,6 +88,12 @@ const AuthForm = () => {
                   : "Fill in the details below to get started with CalSci."}
               </p>
             </div>
+
+            {error && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-medium">
+                {error}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               {!isLogin && (
@@ -142,9 +171,14 @@ const AuthForm = () => {
 
               <button
                 type="submit"
-                className="w-full py-4 bg-green-800 hover:bg-green-900 active:scale-95 text-white rounded-xl font-bold shadow-lg shadow-green-200 transition-all duration-200 flex items-center justify-center gap-2 mt-4"
+                disabled={loading}
+                className="w-full py-4 bg-green-800 hover:bg-green-900 active:scale-95 text-white rounded-xl font-bold shadow-lg shadow-green-200 transition-all duration-200 flex items-center justify-center gap-2 mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isLogin ? "Sign In" : "Create Account"}
+                {loading
+                  ? "Loading..."
+                  : isLogin
+                  ? "Sign In"
+                  : "Create Account"}
                 <ArrowRight size={18} />
               </button>
             </form>

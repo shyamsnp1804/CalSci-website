@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route} from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
@@ -13,6 +13,11 @@ import Mechanical from "./pages/hardware/Mechanical";
 import CalsciUser from "./pages/CalsciUser";
 import Footer from "./components/Footer";
 
+import { AuthProvider } from "./context/AuthContext";
+import Dashboard from "./pages/Dashboard";
+
+import ProtectedRoute from "./routes/ProtectedRoute";
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -25,7 +30,16 @@ function App() {
           <Route path="/software/simulator" element={<Simulator />} />
           <Route path="/hardware/circuit" element={<Circuit />} />
           <Route path="/hardware/mechanical" element={<Mechanical />} />
-                <Route path="/calsciuser" element={<CalsciUser />} />
+          <Route path="/calsciuser" element={<CalsciUser />} />
+
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -37,6 +51,8 @@ function App() {
 
 export default function AppWrapper() {
   return (
+    <AuthProvider>
       <App />
+    </AuthProvider>
   );
 }
