@@ -3,7 +3,6 @@ import FeaturesSection from "../components/home/FeaturesSection";
 import HowItMade from "../components/home/HowItmade";
 import ContactUsSection from "../components/home/ContactUsSection";
 
-import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
 function HomePage() {
@@ -19,7 +18,6 @@ function HomePage() {
 
       <ContactUsSection />
 
-      <Footer />
     </div>
   );
 }
