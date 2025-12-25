@@ -8,6 +8,7 @@ export async function signUpUser(userName, email, password) {
       password,
       options: {
         data: { userName },
+         emailRedirectTo: `${window.location.origin}/calsciuser`
       },
     });
 
@@ -26,6 +27,7 @@ export async function signUpUser(userName, email, password) {
     if (data.user) {
       return {
         success: true,
+         needsVerification: true,
         message: "Signup successful! Please check your email to confirm.",
       };
     }

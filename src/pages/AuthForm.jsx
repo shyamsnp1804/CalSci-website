@@ -4,11 +4,15 @@ import { Mail, Lock, LogIn, UserPlus, User, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { handleLogin, handleSignup } from "./authHandler";
 
+import EmailVerificationModal from "../components/EmailVerificationModal";
+
 const AuthForm = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
 
   const [formData, setFormData] = useState({
     username: "",
@@ -30,24 +34,39 @@ const AuthForm = () => {
     setLoading(true);
 
     let result;
+
     if (isLogin) {
       result = await handleLogin(formData.email, formData.password);
+
+      setLoading(false);
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      if (!result.user?.email_confirmed_at) {
+        setError("Please verify your email before logging in.");
+        return;
+      }
+
+      navigate("/dashboard");
     } else {
       result = await handleSignup(
         formData.username,
         formData.email,
         formData.password
       );
+
+      setLoading(false);
+
+      if (!result.success) {
+        setError(result.message);
+        return;
+      }
+
+      setShowVerifyModal(true);
     }
-
-    setLoading(false);
-
-    if (!result.success) {
-      setError(result.message);
-      return;
-    }
-
-    if (isLogin) navigate("/dashboard");
   };
 
   return (
@@ -197,6 +216,12 @@ const AuthForm = () => {
           </div>
         </div>
       </div>
+      {showVerifyModal && (
+        <EmailVerificationModal
+          email={formData.email}
+          onClose={() => setShowVerifyModal(false)}
+        />
+      )}
     </div>
   );
 };
