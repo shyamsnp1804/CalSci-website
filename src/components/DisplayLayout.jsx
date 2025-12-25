@@ -1,3 +1,5 @@
+const NAVBAR_HEIGHT = "84px"; 
+
 const DisplayLayout = ({ children }) => {
   return (
     <div className="relative w-full min-h-fit">
@@ -17,7 +19,8 @@ const DisplayLayout = ({ children }) => {
           backgroundSize: "8px 8px", 
         }}
       ></div>
-      <div className="relative z-10 w-full h-full">
+      <div className="relative z-10 w-full h-full"
+       style={{ paddingTop: NAVBAR_HEIGHT }}>
         {children}
       </div>
     </div>
