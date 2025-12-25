@@ -6,8 +6,8 @@ import { Cpu, Smartphone, Zap, Code } from "lucide-react";
 function CalsciUser() {
   return (
     <DisplayLayout>
-      <section className="relative w-full min-h-screen flex items-center justify-center px-4 sm:px-6 py-12 lg:py-20 overflow-hidden">
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16 max-w-7xl mx-auto z-10 w-full">
+      <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="flex flex-col lg:flex-row items-center justify-center max-w-7xl mx-auto z-10 w-full">
           <div className="text-left flex-1 max-w-2xl flex flex-col gap-6 px-2">
             <div className="space-y-2">
               <h1 className="text-5xl sm:text-6xl font-mono font-bold tracking-tight text-[#1b4332]">
