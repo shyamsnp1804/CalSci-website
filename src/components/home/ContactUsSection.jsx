@@ -44,7 +44,12 @@ const ContactUsSection = () => {
     <DisplayLayout>
       <section className="w-full py-20 px-2 sm:px-2">
         <div className="max-w-5xl mx-auto flex flex-col lg:flex-row items-center gap-20">
-          <TeamCircle />
+          <div className="w-full flex justify-center">
+            <div className="scale-[0.75] sm:scale-[0.9] lg:scale-100 origin-center">
+              <TeamCircle />
+            </div>
+          </div>
+
           <div className="w-full max-w-md">
             <h1 className="text-3xl sm:text-4xl font-mono font-bold text-[#1b4332] mb-2">
               Be in Touch
