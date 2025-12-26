@@ -52,7 +52,7 @@ const HowItMade = () => {
 
               <div className="border-l-2 border-[#95d5b2] text-[#1b4332] pl-5 space-y-4 mt-2 text-left">
                 <Link
-                  to="/software/native"
+                  to="/docs/SDK"
                   className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Code size={20} />
@@ -61,21 +61,21 @@ const HowItMade = () => {
                   </span>
                 </Link>
                 <Link
-                  to="/software/simulator"
+                  to="/docs/simulator"
                   className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Monitor size={20} />
                   <span>
-                    <b>Simulator</b> – Run and test programs virtually.
+                    <b>Simulator</b> - Run and test programs virtually.
                   </span>
                 </Link>
                 <Link
-                  to="/software/extension"
+                  to="/docs/vscode"
                   className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Layers size={20} />
                   <span>
-                    <b>VS Code Extension</b> – Develop, upload, and control your
+                    <b>VS Code Extension</b> - Develop, upload, and control your
                     CalSci.
                   </span>
                 </Link>
@@ -95,7 +95,7 @@ const HowItMade = () => {
 
               <div className="border-l-2 border-[#95d5b2] text-[#1b4332] pl-5 space-y-4 mt-2 text-left">
                 <Link
-                  to="/hardware/circuit"
+                  to="/docs/electricalCircuit"
                   className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <GitBranch size={20} />
@@ -104,7 +104,7 @@ const HowItMade = () => {
                   </span>
                 </Link>
                 <Link
-                  to="/hardware/mechanical"
+                  to="/docs/bodyDesign"
                   className="flex items-start space-x-2 hover:text-[#2d6a4f] transition-colors"
                 >
                   <Hammer size={20} />

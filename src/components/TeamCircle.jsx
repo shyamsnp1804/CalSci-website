@@ -4,13 +4,13 @@ import { Mail, Linkedin } from "lucide-react";
 const teamMembers = [
   {
     name: "Shoubhik Saha",
-    image: "/images/member1.jpg",
+    image: "/images/sobik.jpeg",
     email: "mailto:sobik@calsci.io",
     linkedin: "https://www.linkedin.com/in/hellosobik",
   },
   {
     name: "Rupesh Verma",
-    image: "/images/member2.jpg",
+    image: "/images/rupesh.jpeg",
     email: "mailto:rupesh@calsci.io",
     linkedin: "https://www.linkedin.com/in/rupesh-verma-b950681a0",
   },
@@ -22,13 +22,13 @@ const teamMembers = [
   },
   {
     name: "Nityanda",
-    image: "/images/member4.jpg",
+    image: "/images/nitya.jpeg",
     email: "mailto:nitya@calsci.io",
     linkedin: "https://www.linkedin.com/in/nityananda-haldar-a44969256",
   },
   {
     name: "Akarsh",
-    image: "/images/member5.jpg",
+    image: "/images/akarsh.jpeg",
     email: "mailto:akarsh@calsci.io",
     linkedin: "",
   },
@@ -77,8 +77,8 @@ const TeamCircle = () => {
             style={{ transform: `translate(${x}px, ${y}px)` }}
           >
             <div
-              className="rounded-full border-4 border-[#95d5b2] 
-              shadow-lg hover:scale-105 transition-transform bg-white"
+              className="rounded-full border-1 border-[#9aebbe] 
+              shadow-lg hover:scale-200 transition-transform bg-white"
               style={{
                 width: sizes.img,
                 height: sizes.img,
@@ -90,7 +90,7 @@ const TeamCircle = () => {
                 className="w-full h-full rounded-full object-cover"
               />
             </div>
-            <span className={`mt-2 font-semibold text-[#1b4332] ${sizes.name}`}>
+            <span className={`mt-2 font-bold text-[#1b4332] ${sizes.name}`}>
               {member.name}
             </span>
             <div className="flex gap-2 mt-1">
@@ -101,14 +101,14 @@ const TeamCircle = () => {
                   rel="noopener noreferrer"
                   className="text-[#1b4332] hover:text-[#52b788]"
                 >
-                  <Linkedin size={14} />
+                  <Linkedin size={20} />
                 </a>
               )}
               <a
                 href={member.email}
                 className="text-[#1b4332] hover:text-[#52b788]"
               >
-                <Mail size={14} />
+                <Mail size={20} />
               </a>
             </div>
           </div>
