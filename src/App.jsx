@@ -1,14 +1,8 @@
-import { Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
-
-import Native from "./pages/software/Native";
-import Extension from "./pages/software/Extension";
-import Simulator from "./pages/software/Simulator";
-import Circuit from "./pages/hardware/Circuit";
-import Mechanical from "./pages/hardware/Mechanical";
 
 import CalsciUser from "./pages/CalsciUser";
 import Footer from "./components/Footer";
@@ -18,6 +12,15 @@ import Dashboard from "./pages/Dashboard";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+import DocsLayout from "./docs/DocsLayout";
+import Introduction from "./docs/pages/Introduction";
+import SDK from "./docs/pages/SDK";
+import Simulator from "./docs/pages/Simulator";
+import ElectricalCircuit from "./docs/pages/ElectricalCircuit";
+import BodyDesign from "./docs/pages/BodyDesign";
+import VSCodeExtension from "./docs/pages/VSCodeExtension";
+import Apps from "./docs/pages/Apps";
+
 function App() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -25,11 +28,6 @@ function App() {
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/software/native" element={<Native />} />
-          <Route path="/software/extension" element={<Extension />} />
-          <Route path="/software/simulator" element={<Simulator />} />
-          <Route path="/hardware/circuit" element={<Circuit />} />
-          <Route path="/hardware/mechanical" element={<Mechanical />} />
           <Route path="/calsciuser" element={<CalsciUser />} />
 
           <Route
@@ -40,6 +38,17 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="/docs" element={<DocsLayout />}>
+            <Route index element={<Introduction />} />
+            <Route path="introduction" element={<Introduction />} />
+            <Route path="sdk" element={<SDK />} />
+            <Route path="simulator" element={<Simulator />} />
+            <Route path="electricalCircuit" element={<ElectricalCircuit />} />
+            <Route path="bodyDesign" element={<BodyDesign />} />
+            <Route path="vscode" element={<VSCodeExtension />} />
+            <Route path="apps" element={<Apps />} />
+          </Route>
 
           <Route path="*" element={<NotFound />} />
         </Routes>
