@@ -17,7 +17,7 @@ function CalsciUser() {
             </div>
 
             <p className="text-lg sm:text-xl font-mono text-[#2d6a4f] leading-relaxed">
-              India’s first and only open-source scientific programmable
+              India's first and only open-source scientific programmable
               calculator. Connect your hardware to the cloud and supercharge
               your workflow.
             </p>
