@@ -43,7 +43,7 @@ const Introduction = () => {
         <img
           src="/images/app1.png"
           alt="CalSci apps"
-          className="w-full max-w-4xl"
+          className="w-full max-w-xl mx-auto"
         />
         <Link
           to="/docs/apps"
@@ -63,7 +63,7 @@ const Introduction = () => {
         <img
           src="/images/feature.png"
           alt="Online features"
-          className="w-full max-w-4xl"
+          className="w-full max-w-xl mx-auto"
         />
       </section>
       <section className="flex flex-col gap-10">
