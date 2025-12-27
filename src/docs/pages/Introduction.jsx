@@ -10,7 +10,7 @@ const Introduction = () => {
         <img
           src="/images/docs1.png"
           alt="CalSci programmable calculator"
-          className="w-full max-w-4xl mx-auto"
+          className="w-full max-w-xl mx-auto"
         />
         <p className="text-lg sm:text-xl text-[#2d6a4f] max-w-3xl">
           CalSci is a programmable scientific calculator designed for engineers,
@@ -68,28 +68,68 @@ const Introduction = () => {
       </section>
       <section className="flex flex-col gap-10">
         <h2 className="text-3xl font-semibold">
-          Build Your Own Apps in Python
+          Build Your Own Apps in MicroPython
         </h2>
+
         <p className="max-w-3xl text-[#2d6a4f] text-lg">
           If you want to go deeper, CalSci provides a full Python SDK that lets
           you build your own apps — from simple calculators to sensor-driven
           tools.
         </p>
-        <div className="flex flex-wrap gap-6">
-          <Link to="/docs/sdk" className="text-[#40916c] font-medium underline">
-            CalSci SDK →
-          </Link>
-          <Link
-            to="/docs/simulator"
-            className="text-[#40916c] font-medium underline"
-          >
-            App Simulator →
-          </Link>
+        <div className="flex flex-col gap-6">
+          <h3 className="text-2xl font-semibold">
+            Example: Add Two Numbers App
+          </h3>
+
+          <p className="max-w-3xl text-[#2d6a4f] text-lg">
+            Apps in CalSci are small Python programs. For example, a simple app
+            can take two numbers as input, add them, and display the result —
+            just like a custom calculator made by you.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-10 items-center">
+            <img src="/images/app2.png" alt="app_image" />
+            <img src="/images/app3.png" alt="app_image" />
+          </div>
+          <div className="flex flex-wrap gap-6">
+            <Link
+              to="/docs/apps"
+              className="text-[#40916c] font-medium underline"
+            >
+              Learn how CalSci Apps work →
+            </Link>
+            <Link
+              to="/docs/sdk"
+              className="text-[#40916c] font-medium underline"
+            >
+              Explore the CalSci SDK →
+            </Link>
+          </div>
         </div>
       </section>
       <section className="flex flex-col gap-10">
-        <h2 className="text-3xl font-semibold">Develop Faster with VS Code</h2>
+        <h2 className="text-3xl font-semibold">
+          Test Apps Without Real Hardware
+        </h2>
 
+        <p className="max-w-3xl text-[#2d6a4f] text-lg">
+          Don't have a CalSci device yet? No problem. CalSci provides a built-in
+          simulator that lets you run and test your apps on your computer before
+          deploying them to real hardware.
+        </p>
+        <img
+          src="/images/simulator.png"
+          alt="CalSci simulator"
+          className="w-full max-w-xl mx-auto max-h-[800px]"
+        />
+        <Link
+          to="/docs/simulator"
+          className="text-[#40916c] font-medium underline w-fit"
+        >
+          Learn how the Simulator works →
+        </Link>
+      </section>
+      <section className="flex flex-col gap-10">
+        <h2 className="text-3xl font-semibold">Develop Faster with VS Code</h2>
         <p className="max-w-3xl text-[#2d6a4f] text-lg">
           The CalSci VS Code Extension allows you to write, test, and deploy
           apps directly from your editor — making development fast and familiar.
