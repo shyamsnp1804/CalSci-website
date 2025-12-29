@@ -9,7 +9,6 @@ import {
   GitBranch,
 } from "lucide-react";
 import DisplayLayout from "../DisplayLayout";
-import calsciImage from "../../../public/calsci1.png";
 
 const HowItMade = () => {
   return (
@@ -21,7 +20,7 @@ const HowItMade = () => {
           </h1>
 
           <img
-            src={calsciImage}
+            src="/calsci1.png"
             alt="CalSci Device"
             className="w-[240px] sm:w-[380px] md:w-[600px] lg:w-[800px] rounded-xl shadow-lg mb-6 sm:mb-8"
           />

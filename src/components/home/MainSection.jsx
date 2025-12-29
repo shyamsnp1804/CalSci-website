@@ -1,5 +1,4 @@
 import DisplayLayout from "../DisplayLayout";
-import calsciDevice from "../../../public/calsci.png";
 
 const MainSection = () => {
   return (
@@ -44,7 +43,7 @@ const MainSection = () => {
           </div>
           <div className="flex justify-center flex-1 px-2">
             <img
-              src={calsciDevice}
+              src="/calsci.png"
               alt="CalSci Device"
               className="w-[60%] sm:w-[300px] md:w-[340px] lg:w-[380px] max-w-[400px] drop-shadow-lg"
             />
