@@ -15,8 +15,15 @@ const DocsLayout = () => {
     <DisplayLayout>
       <div className="relative w-full min-h-screen flex">
         <aside
-          className="hidden md:block fixed w-72 px-6 py-8 h-[calc(100vh-84px)] border-r border-[#b7e4c7]/60"
-          style={{ top: "84px" }}
+          className="
+    hidden md:flex
+    w-72 shrink-0
+    px-6 py-8
+    sticky top-[84px]
+    max-h-[calc(100vh-84px)]
+    overflow-y-auto
+    border-r border-[#b7e4c7]/60
+  "
         >
           <DocsSidebar />
         </aside>
@@ -48,7 +55,7 @@ const DocsLayout = () => {
           </div>
         )}
 
-        <main className="flex-1 px-6 sm:px-10 py-10 md:ml-72">
+        <main className="flex-1 px-6 sm:px-10 py-10">
           <div className="max-w-5xl mx-auto">
             <div className="md:hidden sticky top-[84px] z-40 mb-6">
               <button
